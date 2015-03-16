@@ -13,8 +13,8 @@ package estruturasdedados;
 public interface BinNode<E> {
     /**get e set
      * @return  */
-    public E element();
-    public E setElement(E v);
+    public E getElement();
+    public void setElement(E v);
     
     /** Retorna o filho da esquerda
      * @return  */
