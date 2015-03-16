@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.estruturasdedados.BST;
+package br.com.estruturasdedados.implementations;
 
-import br.com.estruturasdedados.ADT.BinNode;
+import br.com.estruturasdedados.models.BinNode;
+import br.com.estruturasdedados.models.BinNode;
 
 /**
  *
