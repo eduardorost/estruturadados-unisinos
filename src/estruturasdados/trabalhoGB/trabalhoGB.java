@@ -36,28 +36,10 @@ public class trabalhoGB extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-      //imagePanel = new br.unisinos.imagepanel.ImagePanel();
-
       setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
       getContentPane().add(imagePanel, java.awt.BorderLayout.CENTER);
 
       pack();
-
-        //setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        //javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        //getContentPane().setLayout(layout);
-        //layout.setHorizontalGroup(
-        //    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        //    .addGap(0, 400, Short.MAX_VALUE)
-        //);
-        //layout.setVerticalGroup(
-        //    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        //    .addGap(0, 300, Short.MAX_VALUE)
-        //);
-        //
-        //pack();
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -88,13 +70,15 @@ public class trabalhoGB extends javax.swing.JFrame {
         String[] size = lines.remove(0).split(" ");
         int width = Integer.valueOf(size[0]);
         int height = Integer.valueOf(size[1]);
+        
+        int maxrgb = Integer.valueOf(lines.remove(0));
 
         int[] pixels = new int[width * height];
-
+        
         for (int i = 0; i < pixels.length; i++) {
-            int r = i + (i * height) * width;
-            int g = i + (i * height) * width * 2;
-            int b = i + (i * height) * width * 3;
+            int r = Integer.valueOf(lines.remove(0));
+            int g = Integer.valueOf(lines.remove(0));
+            int b = Integer.valueOf(lines.remove(0));
 
             r = (r << 16) & 0x00FF0000; //Shift red 16-bits and mask out other stuff
             g = (g << 8) & 0x0000FF00; //Shift Green 8-bits and mask out other stuff
