@@ -5,6 +5,7 @@
  */
 package estruturasdados.trabalhoGB;
 
+import br.unisinos.imagepanel.ImagePanel;
 import estruturasdados.trabalhoGB.Helpers.FileHelper;
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class trabalhoGB {
 
     public static void main(String[] args) {
         FileHelper fh = new FileHelper();
+        ImagePanel imagePanel = new ImagePanel();
 
         File input = fh.getFile();
         List<String> lines = null;
@@ -42,8 +44,20 @@ public class trabalhoGB {
             }
         } while (!validFile);
 
+        String[] size = lines.remove(0).split(" ");
+        int width = Integer.valueOf(size[0]);
+        int height = Integer.valueOf(size[1]);
+
+        int[] pixels = new int[width * height];
+
+        int i = 0;
         for (String line : lines) {
-            System.out.println(line);
+            for (String rgb : line.split(" ")) {
+                pixels[i] = Integer.valueOf(rgb);
+            }
         }
+        
+        imagePanel.update(pixels, width, height);
+        //TODO: FAZER PRINTAR O PANEL!
     }
 }
