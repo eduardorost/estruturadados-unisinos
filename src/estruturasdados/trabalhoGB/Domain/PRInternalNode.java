@@ -17,17 +17,22 @@ public class PRInternalNode extends Node {
         this.position = pos;
     }
 
-
     private PRLeafNode nwChild;
     private PRLeafNode neChild;
     private PRLeafNode swChild;
     private PRLeafNode seChild;
     private int width;
     private int height;
-    
-    
-    public void insert(PRLeafNode node)
-    {
+
+    public void insert(PRLeafNode node) {
+
         //TODO: Fazer a lógica de inserção de novo nodo.
+    }
+
+    private PositionEnum getPositionNode() {
+        
+        //TODO: Fazer a lógica para identificar qual posição inserir.
+        PositionEnum pos = null;
+        return pos;
     }
 }
