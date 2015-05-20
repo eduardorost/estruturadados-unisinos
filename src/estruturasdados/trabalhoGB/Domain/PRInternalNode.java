@@ -9,7 +9,7 @@ package estruturasdados.trabalhoGB.Domain;
  *
  * @author rosted
  */
-public class PRInternalNode extends Node {
+public class PRInternalNode extends PRNode {
 
     public PRInternalNode(int width, int height, PositionEnum pos) {
         this.width = width;
@@ -17,11 +17,11 @@ public class PRInternalNode extends Node {
         this.position = pos;
     }
 
-    //TODO: ESSES FILHOS PODEM SER INTERNOS TAMBÉM.
-    private PRLeafNode nwChild;
-    private PRLeafNode neChild;
-    private PRLeafNode swChild;
-    private PRLeafNode seChild;
+    //LEMBRAR QUE ESSES FILHOS PODEM SER INTERNOS OU FOLHAS, FAZER O TYPEOF PARA IDENTIFICAR QUAL TIPO ELE É.
+    private PRNode neChild;
+    private PRNode swChild;
+    private PRNode nwChild;
+    private PRNode seChild;
     
     private int width;
     private int height;

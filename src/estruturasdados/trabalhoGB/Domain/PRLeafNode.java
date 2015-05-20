@@ -9,7 +9,7 @@ package estruturasdados.trabalhoGB.Domain;
  *
  * @author rosted
  */
-public class PRLeafNode extends Node {
+public class PRLeafNode extends PRNode {
     public PRLeafNode(int x, int y, int rgb) {
         this.x = x;
         this.y = y;

@@ -9,7 +9,7 @@ package estruturasdados.trabalhoGB.Domain;
  *
  * @author rosted
  */
-public class Node {
+public class PRNode {
     
     protected int level;
     protected PositionEnum position;
