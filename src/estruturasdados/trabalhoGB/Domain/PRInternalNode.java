@@ -11,10 +11,20 @@ package estruturasdados.trabalhoGB.Domain;
  */
 public class PRInternalNode extends Node {
 
+    public PRInternalNode(int width, int height, PositionEnum pos) {
+        this.width = width;
+        this.height = height;
+        this.position = pos;
+    }
+
+
     private PRLeafNode nwChild;
     private PRLeafNode neChild;
     private PRLeafNode swChild;
     private PRLeafNode seChild;
+    private int width;
+    private int height;
+    
     
     public void insert(PRLeafNode node)
     {

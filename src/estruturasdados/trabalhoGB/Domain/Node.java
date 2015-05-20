@@ -11,23 +11,7 @@ package estruturasdados.trabalhoGB.Domain;
  */
 public class Node {
     
-    private int level;
-    private PositionEnum position;
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public PositionEnum getPosition() {
-        return position;
-    }
-
-    public void setPosition(PositionEnum position) {
-        this.position = position;
-    }
-   
+    protected int level;
+    protected PositionEnum position;
+    
 }

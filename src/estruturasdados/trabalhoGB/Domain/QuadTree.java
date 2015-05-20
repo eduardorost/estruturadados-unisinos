@@ -14,8 +14,15 @@ public class QuadTree {
     public QuadTree(int[] pixels, int w, int h) {
         this.width = w;
         this.height = h;
-        this.root = new PRInternalNode();
-
+        
+        if(pixels.length == 0)
+        {
+            this.leaf = new PRLeafNode(0, 0, pixels[0]);
+            return;
+        }
+        
+        this.root = new PRInternalNode(width, height, PositionEnum.ROOT);
+        
         for (int i = 0; i < pixels.length; i++) {
             //coluna
             int x = i % w;
@@ -29,4 +36,5 @@ public class QuadTree {
     private int width;
     private int height;
     private PRInternalNode root;
+    private PRLeafNode leaf;
 }
