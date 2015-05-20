@@ -17,10 +17,12 @@ public class PRInternalNode extends Node {
         this.position = pos;
     }
 
+    //TODO: ESSES FILHOS PODEM SER INTERNOS TAMBÉM.
     private PRLeafNode nwChild;
     private PRLeafNode neChild;
     private PRLeafNode swChild;
     private PRLeafNode seChild;
+    
     private int width;
     private int height;
 
