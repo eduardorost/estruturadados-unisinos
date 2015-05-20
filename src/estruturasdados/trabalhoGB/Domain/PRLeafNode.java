@@ -9,18 +9,15 @@ package estruturasdados.trabalhoGB.Domain;
  *
  * @author rosted
  */
-public enum PositionEnum {
-
-    ROOT(0), NW(1), NE(2), SW(3), SE(4);
-    
-    private final int valor;
-
-    PositionEnum(int valorOpcao) {
-        valor = valorOpcao;
+public class PRLeafNode extends Node {
+    public PRLeafNode(int x, int y, int rgb) {
+        this.x = x;
+        this.y = y;
+        this.rgb = rgb;
     }
 
-    public int getValor() {
-        return valor;
-    }
-
+    private PRInternalNode father;
+    private int x;
+    private int y;
+    private int rgb;
 }
