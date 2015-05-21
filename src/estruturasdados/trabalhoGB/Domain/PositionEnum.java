@@ -13,14 +13,14 @@ public enum PositionEnum {
 
     ROOT(0), NW(1), NE(2), SW(3), SE(4);
     
-    private final int valor;
+    private final int value;
 
-    PositionEnum(int valorOpcao) {
-        valor = valorOpcao;
+    PositionEnum(int valueOption) {
+        value = valueOption;
     }
 
-    public int getValor() {
-        return valor;
+    public int getValue() {
+        return value;
     }
 
 }

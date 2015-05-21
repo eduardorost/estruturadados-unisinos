@@ -9,9 +9,11 @@ package estruturasdados.trabalhoGB.Domain;
  *
  * @author rosted
  */
-public class PRNode {
+public abstract class PRNode {
     
     protected int level;
     protected PositionEnum position;
+    
+    //public abstract void insert(PRNode nodo);
     
 }

@@ -20,4 +20,16 @@ public class PRLeafNode extends PRNode {
     private int x;
     private int y;
     private int rgb;
+
+    //@Override
+    //public void insert(PRNode nodo) {
+    //}
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

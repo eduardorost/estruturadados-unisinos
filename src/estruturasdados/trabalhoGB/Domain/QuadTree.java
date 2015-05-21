@@ -17,11 +17,11 @@ public class QuadTree {
         
         if(pixels.length == 0)
         {
-            this.leaf = new PRLeafNode(0, 0, pixels[0]);
+            this.root = new PRLeafNode(0, 0, pixels[0]);
             return;
         }
         
-        this.root = new PRInternalNode(width, height, PositionEnum.ROOT);
+        this.root = new PRInternalNode(width/2, height/2, PositionEnum.ROOT);
         
         for (int i = 0; i < pixels.length; i++) {
             //coluna
@@ -29,12 +29,11 @@ public class QuadTree {
             //linha
             int y = Math.floorDiv(i, h);
 
-            root.insert(new PRLeafNode(x, y, pixels[i]));
+            ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]));
         }
     }
 
     private int width;
     private int height;
-    private PRInternalNode root;
-    private PRLeafNode leaf;
+    private PRNode root;
 }
