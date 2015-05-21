@@ -10,20 +10,17 @@ package estruturasdados.trabalhoGB.Domain;
  * @author rosted
  */
 public class PRLeafNode extends PRNode {
-    public PRLeafNode(int x, int y, int rgb) {
+    public PRLeafNode(int x, int y, int rgb, PositionEnum pos, PRNode father) {
+        super(pos, father);
+        
         this.x = x;
         this.y = y;
         this.rgb = rgb;
     }
 
-    private PRInternalNode father;
     private int x;
     private int y;
     private int rgb;
-
-    //@Override
-    //public void insert(PRNode nodo) {
-    //}
 
     public int getX() {
         return x;

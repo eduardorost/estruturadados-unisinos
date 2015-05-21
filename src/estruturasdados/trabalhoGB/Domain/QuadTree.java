@@ -11,25 +11,26 @@ package estruturasdados.trabalhoGB.Domain;
  */
 public class QuadTree {
 
-    public QuadTree(int[] pixels, int w, int h) {
-        this.width = w;
-        this.height = h;
-        
-        if(pixels.length == 0)
-        {
-            this.root = new PRLeafNode(0, 0, pixels[0]);
+    public QuadTree(int[] pixels, int width, int height) {
+        this.width = width;
+        this.height = height;
+
+        if (pixels.length == 0) {
+            this.root = new PRLeafNode(0, 0, pixels[0], PositionEnum.ROOT, null);
             return;
         }
-        
-        this.root = new PRInternalNode(width/2, height/2, PositionEnum.ROOT);
-        
+
+        int[] w = {0, this.width};
+        int[] h = {0, this.height};
+        this.root = new PRInternalNode(this.width, this.height, w, h, PositionEnum.ROOT, null);
+
         for (int i = 0; i < pixels.length; i++) {
             //coluna
-            int x = i % w;
+            int x = i % width;
             //linha
-            int y = Math.floorDiv(i, h);
+            int y = Math.floorDiv(i, height);
 
-            ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]));
+            ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i], PositionEnum.ROOT, null));
         }
     }
 
