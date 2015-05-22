@@ -9,27 +9,19 @@ import estruturasdados.trabalhoGB.Helpers.FatherExlusionStrategy;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSerializationContext;
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.text.DateFormat;
-import org.json.JSONException;
-import org.json.JSONStringer;
 
 /**
  *
  * @author rosted
  */
-public class PRLeafNode extends PRNode implements Serializable {
+public class PRLeafNode extends PRNode {
 
-    public PRLeafNode(int x, int y, int rgb, PositionEnum pos, PRNode father) {
-        super(pos, father);
+    public PRLeafNode(int x, int y, int rgb) {
 
         this.x = x;
         this.y = y;
         this.rgb = rgb;
+        
     }
 
     private int x;

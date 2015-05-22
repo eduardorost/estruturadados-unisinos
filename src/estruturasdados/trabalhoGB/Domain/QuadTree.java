@@ -5,16 +5,10 @@
  */
 package estruturasdados.trabalhoGB.Domain;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Paths;
-import javax.swing.text.AbstractDocument;
 
 /**
  *
@@ -27,13 +21,13 @@ public class QuadTree {
         this.height = height;
 
         if (pixels.length == 0) {
-            this.root = new PRLeafNode(0, 0, pixels[0], PositionEnum.ROOT, null);
+            this.root = new PRLeafNode(0, 0, pixels[0]);
             return;
         }
 
         int[] w = {0, this.width};
         int[] h = {0, this.height};
-        this.root = new PRInternalNode(this.width, this.height, w, h, PositionEnum.ROOT, null);
+        this.root = new PRInternalNode(this.width, this.height, w, h);
 
         //PARA TESTE
         File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
@@ -53,7 +47,7 @@ public class QuadTree {
             int y = Math.floorDiv(i, height);
             System.out.println(i);
 
-            ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i], PositionEnum.ROOT, null));
+            ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]), null);
 
             //PARA TESTE
             try {

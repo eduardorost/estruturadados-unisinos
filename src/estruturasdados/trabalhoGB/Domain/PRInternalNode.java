@@ -9,21 +9,14 @@ import estruturasdados.trabalhoGB.Helpers.FatherExlusionStrategy;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import java.io.Serializable;
-import org.json.JSONException;
-import org.json.JSONStringer;
 
 /**
  *
  * @author rosted
  */
-public class PRInternalNode extends PRNode implements Serializable {
+public class PRInternalNode extends PRNode {
 
-    public PRInternalNode(int width, int height, int[] marginW, int[] marginH, PositionEnum pos, PRNode father) {
-        super(pos, father);
-
+    public PRInternalNode(int width, int height, int[] marginW, int[] marginH) {
         this.marginW = marginW;
         this.marginH = marginH;
         this.width = width;
@@ -43,23 +36,25 @@ public class PRInternalNode extends PRNode implements Serializable {
     private int height;
     private int width;
 
-    public void insert(PRLeafNode node) {
+    public void insert(PRLeafNode node, PRNode father) {
         switch (this.getPositionNode(node)) {
             case NW:
                 if (nwChild == null) {
                     nwChild = node;
                     node.position = PositionEnum.NW;
+                    node.father = father;
+                    node.level = father == null ? 0 : father.getLevel() + 1;
                 } else {
                     if (nwChild instanceof PRInternalNode) {
-                        ((PRInternalNode) nwChild).insert(node);
+                        ((PRInternalNode) nwChild).insert(node, this);
                     } else {
                         //EXEMPLOS ESTÃO TODOS DIVISIVEIS POR 2.
                         int[] w = {this.marginW[0], Math.floorDiv(this.marginW[1], 2)};
                         int[] h = {this.marginH[0], Math.floorDiv(this.marginH[1], 2)};
 
-                        PRInternalNode internalNode = new PRInternalNode(this.width / 2, this.height / 2, w, h, PositionEnum.NW, this);
-                        internalNode.insert((PRLeafNode) nwChild);
-                        internalNode.insert(node);
+                        PRInternalNode internalNode = new PRInternalNode(this.width / 2, this.height / 2, w, h);
+                        internalNode.insert((PRLeafNode) nwChild, this);
+                        internalNode.insert(node, this);
                         nwChild = internalNode;
                     }
                 }
@@ -68,17 +63,19 @@ public class PRInternalNode extends PRNode implements Serializable {
                 if (neChild == null) {
                     neChild = node;
                     node.position = PositionEnum.NE;
+                    node.father = father;
+                    node.level = father == null ? 0 : father.getLevel() + 1;
                 } else {
                     if (neChild instanceof PRInternalNode) {
-                        ((PRInternalNode) neChild).insert(node);
+                        ((PRInternalNode) neChild).insert(node, this);
                     } else {
                         //EXEMPLOS ESTÃO TODOS DIVISIVEIS POR 2.
                         int[] w = {Math.floorDiv(this.marginW[1], 2) + 1, this.marginW[1]};
                         int[] h = {this.marginH[0], Math.floorDiv(this.marginH[1], 2)};
 
-                        PRInternalNode internalNode = new PRInternalNode(this.width / 2, this.height / 2, w, h, PositionEnum.NE, this);
-                        internalNode.insert((PRLeafNode) neChild);
-                        internalNode.insert(node);
+                        PRInternalNode internalNode = new PRInternalNode(this.width / 2, this.height / 2, w, h);
+                        internalNode.insert((PRLeafNode) neChild, this);
+                        internalNode.insert(node, this);
                         neChild = internalNode;
                     }
                 }
@@ -87,17 +84,19 @@ public class PRInternalNode extends PRNode implements Serializable {
                 if (swChild == null) {
                     swChild = node;
                     node.position = PositionEnum.SW;
+                    node.father = father;
+                    node.level = father == null ? 0 : father.getLevel() + 1;
                 } else {
                     if (swChild instanceof PRInternalNode) {
-                        ((PRInternalNode) swChild).insert(node);
+                        ((PRInternalNode) swChild).insert(node, this);
                     } else {
                         //EXEMPLOS ESTÃO TODOS DIVISIVEIS POR 2.
                         int[] w = {this.marginW[0], Math.floorDiv(this.marginW[1], 2)};
                         int[] h = {Math.floorDiv(this.marginH[1], 2) + 1, this.marginH[1]};
 
-                        PRInternalNode internalNode = new PRInternalNode(this.width / 2, this.height / 2, w, h, PositionEnum.SW, this);
-                        internalNode.insert((PRLeafNode) swChild);
-                        internalNode.insert(node);
+                        PRInternalNode internalNode = new PRInternalNode(this.width / 2, this.height / 2, w, h);
+                        internalNode.insert((PRLeafNode) swChild, this);
+                        internalNode.insert(node, this);
                         swChild = internalNode;
                     }
                 }
@@ -106,17 +105,19 @@ public class PRInternalNode extends PRNode implements Serializable {
                 if (seChild == null) {
                     seChild = node;
                     node.position = PositionEnum.SE;
+                    node.father = father;
+                    node.level = father == null ? 0 : father.getLevel() + 1;
                 } else {
                     if (seChild instanceof PRInternalNode) {
-                        ((PRInternalNode) seChild).insert(node);
+                        ((PRInternalNode) seChild).insert(node, this);
                     } else {
                         //EXEMPLOS ESTÃO TODOS DIVISIVEIS POR 2.
                         int[] w = {Math.floorDiv(this.marginW[1], 2) + 1, this.marginW[1]};
                         int[] h = {Math.floorDiv(this.marginH[1], 2) + 1, this.marginH[1]};
 
-                        PRInternalNode internalNode = new PRInternalNode(this.width / 2, this.height / 2, w, h, PositionEnum.SE, this);
-                        internalNode.insert((PRLeafNode) seChild);
-                        internalNode.insert(node);
+                        PRInternalNode internalNode = new PRInternalNode(this.width / 2, this.height / 2, w, h);
+                        internalNode.insert((PRLeafNode) seChild, this);
+                        internalNode.insert(node, this);
                         seChild = internalNode;
                     }
                 }
