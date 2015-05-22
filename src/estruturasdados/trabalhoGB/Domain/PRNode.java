@@ -5,6 +5,8 @@
  */
 package estruturasdados.trabalhoGB.Domain;
 
+import com.google.gson.JsonElement;
+
 /**
  *
  * @author rosted
@@ -24,5 +26,8 @@ public abstract class PRNode {
     public int getLevel() {
         return level;
     }
+    
+    public abstract JsonElement toJson();
+    public abstract String toJsonString();
  
 }

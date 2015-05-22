@@ -5,15 +5,23 @@
  */
 package estruturasdados.trabalhoGB.Domain;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import org.json.JSONException;
+import org.json.JSONStringer;
+
 /**
  *
  * @author rosted
  */
 public class PRInternalNode extends PRNode {
-    
+
     public PRInternalNode(int width, int height, int[] marginW, int[] marginH, PositionEnum pos, PRNode father) {
         super(pos, father);
-        
+
         this.marginW = marginW;
         this.marginH = marginH;
         this.width = width;
@@ -131,4 +139,43 @@ public class PRInternalNode extends PRNode {
             }
         }
     }
+
+    @Override
+    public String toJsonString() {        
+        JsonParser parser = new JsonParser();
+        Gson gson = new GsonBuilder()
+                .enableComplexMapKeySerialization()
+                .serializeNulls()
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .setPrettyPrinting()
+                .create();
+
+        JsonElement el = parser.parse(getJSONStringer());
+        return gson.toJson(el);
+    }
+    
+    @Override
+    public JsonElement toJson() {
+        JsonParser parser = new JsonParser();
+        return parser.parse(getJSONStringer());
+    }
+
+    private String getJSONStringer() throws JSONException {
+        String json = new JSONStringer()
+                .object()
+                .key("position").value(position)
+                .key("level").value(level)
+                .key("marginH").value("["+ marginW[0] + ", " + marginW[1] +"]")
+                .key("marginW").value("["+ marginH[0] + ", " + marginH[1] +"]")
+                .key("height").value(height)
+                .key("width").value(width)
+                .key("nwChild").value(nwChild == null ? null : nwChild.toJson())
+                .key("neChild").value(neChild == null ? null : neChild.toJson())
+                .key("swChild").value(swChild == null ? null : swChild.toJson())
+                .key("seChild").value(seChild == null ? null : seChild.toJson())
+                .endObject()
+                .toString();
+        return json;
+    }
+
 }

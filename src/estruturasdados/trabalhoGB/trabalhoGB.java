@@ -71,11 +71,11 @@ public class trabalhoGB extends javax.swing.JFrame {
         String[] size = lines.remove(0).split(" ");
         int width = Integer.valueOf(size[0]);
         int height = Integer.valueOf(size[1]);
-        
+
         int maxrgb = Integer.valueOf(lines.remove(0));
 
         int[] pixels = new int[width * height];
-        
+
         for (int i = 0; i < pixels.length; i++) {
             int r = Integer.valueOf(lines.remove(0));
             int g = Integer.valueOf(lines.remove(0));
@@ -90,7 +90,7 @@ public class trabalhoGB extends javax.swing.JFrame {
 
         trabalhoGB.imagePanel = new ImagePanel();
         trabalhoGB.imagePanel.update(pixels, width, height);
-        
+
         QuadTree tree = new QuadTree(pixels, width, height);
 
         /* Set the Nimbus look and feel */
