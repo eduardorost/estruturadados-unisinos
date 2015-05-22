@@ -57,7 +57,6 @@ public class QuadTree {
 
             //PARA TESTE
             try {
-                //write converted json data to a file named "file.json"
                 File file = new File(Paths.get(directory.getAbsolutePath(), "etapa" + i + ".json").toString());
 
                 if (!file.exists()) {
@@ -81,21 +80,7 @@ public class QuadTree {
 
     
     public String toJson() {
-        JsonParser parser = new JsonParser();
-        Gson gson = new GsonBuilder()
-                .enableComplexMapKeySerialization()
-                .serializeNulls()
-                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                .setPrettyPrinting()
-                .create();
-
-        JsonElement el = null;
-        if(root instanceof PRLeafNode)
-            el = parser.parse(((PRLeafNode) root).toJsonString());
-        else
-            el = parser.parse(((PRInternalNode) root).toJsonString());
-        return gson.toJson(el);
+        return root.toJson();
     }
-    
     
 }
