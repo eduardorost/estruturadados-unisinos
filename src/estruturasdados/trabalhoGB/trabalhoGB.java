@@ -81,11 +81,14 @@ public class trabalhoGB extends javax.swing.JFrame {
             int g = Integer.valueOf(lines.remove(0));
             int b = Integer.valueOf(lines.remove(0));
 
-            r = (r << 16) & 0x00FF0000; //Shift red 16-bits and mask out other stuff
-            g = (g << 8) & 0x0000FF00; //Shift Green 8-bits and mask out other stuff
-            b = b & 0x000000FF; //Mask out anything not blue.
+            //0x00FF0000 -> hexadecimal do vermelho
+            //0x0000FF00 -> hexadecimal do verde
+            //0x000000FF -> hexadecimal do azul
+            r = (r << 16) & 0x00FF0000;
+            g = (g << 8) & 0x0000FF00;
+            b = b & 0x000000FF;
 
-            pixels[i] = 0xFF000000 | r | g | b; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
+            pixels[i] = 0xFF000000 | r | g | b;
         }
 
         trabalhoGB.imagePanel = new ImagePanel();

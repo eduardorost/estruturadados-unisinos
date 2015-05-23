@@ -70,7 +70,10 @@ public class QuadTree {
 
     private int width;
     private int height;
+    //ARVORE DA IMAGEM ORIGINAL
     private PRNode root;
+    //ARVORE PARA A IMAGEM COMPRENSADA
+    private PRNode compressedRoot;
 
     
     public String toJson() {
