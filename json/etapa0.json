@@ -2,7 +2,7 @@
   "NwChild": {
     "X": 0,
     "Y": 0,
-    "Rgb": -16777216,
+    "Rgb": -4408132,
     "Level": 0,
     "Position": "NW"
   },
@@ -11,14 +11,14 @@
   "SeChild": null,
   "MarginW": [
     0,
-    4
+    512
   ],
   "MarginH": [
     0,
-    4
+    256
   ],
-  "Height": 4,
-  "Width": 4,
+  "Height": 256,
+  "Width": 512,
   "Level": 0,
   "Position": null
 }

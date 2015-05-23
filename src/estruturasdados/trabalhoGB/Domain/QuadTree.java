@@ -56,7 +56,7 @@ public class QuadTree {
                 if (!file.exists()) {
                     file.createNewFile();
                 }
-                
+
                 FileWriter writer = new FileWriter(file);
                 writer.write(this.toJson());
                 writer.close();
@@ -70,14 +70,20 @@ public class QuadTree {
 
     private int width;
     private int height;
+    
     //ARVORE DA IMAGEM ORIGINAL
     private PRNode root;
+   
     //ARVORE PARA A IMAGEM COMPRENSADA
     private PRNode compressedRoot;
 
-    
     public String toJson() {
         return root.toJson();
     }
-    
+
+    public void CompressImage(int quality) {
+        //return new int[]{1, 2};
+        
+    }
+
 }

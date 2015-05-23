@@ -8,6 +8,7 @@ package estruturasdados.trabalhoGB;
 import br.unisinos.imagepanel.ImagePanel;
 import estruturasdados.trabalhoGB.Domain.QuadTree;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Panel;
 import java.io.File;
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class Index extends javax.swing.JFrame {
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 207, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,7 +119,7 @@ public class Index extends javax.swing.JFrame {
                 .addGap(0, 150, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -136,9 +137,11 @@ public class Index extends javax.swing.JFrame {
                     .addComponent(compressionRateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(proccessImageButton))
                 .addGap(19, 19, 19)
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(18, Short.MAX_VALUE))
         );
+
+        panel.getAccessibleContext().setAccessibleDescription("");
 
         pack();
         setLocationRelativeTo(null);
@@ -237,12 +240,13 @@ public class Index extends javax.swing.JFrame {
 
         imagePanel = new ImagePanel();
         imagePanel.update(pixels, width, height);
-        imagePanel.setVisible(true);
-        //TODO: ARRUMAR O TAMANHO
-        //ESSE PANEL SEMPRE VAI MOSTRAR A IMAGEM ORIGINAL, CRIAR OUTRO PANEL PARA A IMAGEM COMPREENSADA
-        panel.setSize(width, height);
         panel.add(imagePanel);
+        setSize(Math.max(getWidth(), width * 2), Math.max(getHeight(), height * 2));
+        setPreferredSize(getSize());
+        setMinimumSize(getSize());
         panel.setVisible(true);
+        panel.repaint();
+        
         pack();
 
         QuadTree tree = new QuadTree(pixels, width, height);

@@ -94,7 +94,7 @@ public class trabalhoGB extends javax.swing.JFrame {
         trabalhoGB.imagePanel = new ImagePanel();
         trabalhoGB.imagePanel.update(pixels, width, height);
 
-        QuadTree tree = new QuadTree(pixels, width, height);
+        //QuadTree tree = new QuadTree(pixels, width, height);
 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
