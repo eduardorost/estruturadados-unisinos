@@ -17,8 +17,8 @@ import java.nio.file.Paths;
 public class QuadTree {
 
     public QuadTree(int[] pixels, int width, int height) {
-        this.width = width;
-        this.height = height;
+        this.width = Math.max(width, height);
+        this.height = Math.max(width, height);
 
         if (pixels.length == 0) {
             this.root = new PRLeafNode(0, 0, pixels[0]);

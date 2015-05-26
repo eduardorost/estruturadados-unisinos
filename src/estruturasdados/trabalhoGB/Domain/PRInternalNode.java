@@ -48,9 +48,6 @@ public class PRInternalNode extends PRNode {
                     if (nwChild instanceof PRInternalNode) {
                         ((PRInternalNode) nwChild).insert(node, this);
                     } else {
-                        //EXEMPLOS ESTÃO TODOS DIVISIVEIS POR 2.
-                        //int[] w = {this.marginW[0], Math.floorDiv(this.marginW[1], 2)};
-                        //int[] h = {this.marginH[0], Math.floorDiv(this.marginH[1], 2)};
                         int[] w = {this.marginW[0], (this.marginW[0] + (this.width / 2) - 1)};
                         int[] h = {this.marginH[0], (this.marginH[0] + (this.height / 2) - 1)};
 
@@ -69,9 +66,6 @@ public class PRInternalNode extends PRNode {
                     if (neChild instanceof PRInternalNode) {
                         ((PRInternalNode) neChild).insert(node, this);
                     } else {
-                        //EXEMPLOS ESTÃO TODOS DIVISIVEIS POR 2.
-                        //int[] w = {Math.floorDiv(this.marginW[1], 2) + 1, this.marginW[1]};
-                        //int[] h = {this.marginH[0], Math.floorDiv(this.marginH[1], 2)};
                         int[] w = {this.marginW[1] - ((this.width / 2) - 1), this.marginW[1]};
                         int[] h = {this.marginH[0], (this.marginH[0] + (this.height / 2) - 1)};
 
@@ -90,9 +84,6 @@ public class PRInternalNode extends PRNode {
                     if (swChild instanceof PRInternalNode) {
                         ((PRInternalNode) swChild).insert(node, this);
                     } else {
-                        //EXEMPLOS ESTÃO TODOS DIVISIVEIS POR 2.
-                        //int[] w = {this.marginW[0], Math.floorDiv(this.marginW[1], 2)};
-                        //int[] h = {Math.floorDiv(this.marginH[1], 2) + 1, this.marginH[1]};
                         int[] w = {this.marginW[0], (this.marginW[0] + (this.width / 2) - 1)};
                         int[] h = {this.marginH[1] - ((this.height / 2) - 1), this.marginH[1]};
 
@@ -111,9 +102,6 @@ public class PRInternalNode extends PRNode {
                     if (seChild instanceof PRInternalNode) {
                         ((PRInternalNode) seChild).insert(node, this);
                     } else {
-                        //EXEMPLOS ESTÃO TODOS DIVISIVEIS POR 2.
-                        //int[] w = {Math.floorDiv(this.marginW[1], 2) + 1, this.marginW[1]};
-                        //int[] h = {Math.floorDiv(this.marginH[1], 2) + 1, this.marginH[1]};
                         int[] w = {this.marginW[1] - ((this.width / 2) - 1), this.marginW[1]};
                         int[] h = {this.marginH[1] - ((this.height / 2) - 1), this.marginH[1]};
 
