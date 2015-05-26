@@ -25,9 +25,9 @@ public class QuadTree {
             return;
         }
 
-        int[] w = {0, this.width};
-        int[] h = {0, this.height};
-        this.root = new PRInternalNode(this.width, this.height, w, h);
+        int[] w = {0, this.width - 1};
+        int[] h = {0, this.height - 1};
+        this.root = new PRInternalNode(w, h);
 
         //PARA TESTE
         File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
@@ -48,32 +48,31 @@ public class QuadTree {
             System.out.println(i);
 
             ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]), null);
+        }
 
-            //PARA TESTE
-            try {
-                File file = new File(Paths.get(directory.getAbsolutePath(), "etapa" + i + ".json").toString());
+        //PARA TESTE
+        try {
+            File file = new File(Paths.get(directory.getAbsolutePath(), "quadtree.json").toString());
 
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-
-                FileWriter writer = new FileWriter(file);
-                writer.write(this.toJson());
-                writer.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (!file.exists()) {
+                file.createNewFile();
             }
 
+            FileWriter writer = new FileWriter(file);
+            writer.write(this.toJson());
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private int width;
     private int height;
-    
+
     //ARVORE DA IMAGEM ORIGINAL
     private PRNode root;
-   
+
     //ARVORE PARA A IMAGEM COMPRENSADA
     private PRNode compressedRoot;
 
@@ -83,7 +82,7 @@ public class QuadTree {
 
     public void CompressImage(int quality) {
         //return new int[]{1, 2};
-        
+
     }
 
 }
