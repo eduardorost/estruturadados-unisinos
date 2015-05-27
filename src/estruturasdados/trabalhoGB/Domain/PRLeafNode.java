@@ -49,4 +49,13 @@ public class PRLeafNode extends PRNode {
         return gson.toJson(this);
     }
 
+    @Override
+    protected PRLeafNode clone() {
+        PRLeafNode clone = new PRLeafNode(x, y, rgb);        
+        clone.father = this.father;
+        clone.level = this.level;
+        clone.position = this.position;
+        return clone;
+    }
+
 }

@@ -49,6 +49,8 @@ public class QuadTree {
 
             ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]), null);
         }
+        
+        this.compressedRoot = this.root instanceof PRInternalNode ? ((PRInternalNode)this.root).clone() : ((PRLeafNode)this.root).clone();
 
         //PARA TESTE
         try {

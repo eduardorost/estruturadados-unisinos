@@ -143,5 +143,23 @@ public class PRInternalNode extends PRNode {
 
         return gson.toJson(this);
     }
+    
+    @Override
+    protected PRInternalNode clone() {
+        PRInternalNode clone = new PRInternalNode(marginW, marginH);
+        clone.father = this.father;
+        clone.level = this.level;
+        clone.position = this.position;
+        clone.nwChild = this.nwChild instanceof PRInternalNode ? ((PRInternalNode)this.nwChild).clone() : ((PRLeafNode)this.nwChild).clone();
+        clone.neChild = this.neChild instanceof PRInternalNode ? ((PRInternalNode)this.neChild).clone() : ((PRLeafNode)this.neChild).clone();
+        clone.swChild = this.swChild instanceof PRInternalNode ? ((PRInternalNode)this.swChild).clone() : ((PRLeafNode)this.swChild).clone();
+        clone.seChild = this.seChild instanceof PRInternalNode ? ((PRInternalNode)this.seChild).clone() : ((PRLeafNode)this.seChild).clone();
+        
+        return clone;
+    }
+    
+    public void CompressChilds(int quality)
+    {
+    }
 
 }
