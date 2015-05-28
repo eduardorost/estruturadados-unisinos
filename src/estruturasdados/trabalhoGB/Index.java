@@ -94,7 +94,7 @@ public class Index extends javax.swing.JFrame {
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 413, Short.MAX_VALUE)
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,7 +249,7 @@ public class Index extends javax.swing.JFrame {
         
         pack();
 
-        QuadTree tree = new QuadTree(pixels, width, height);
+        QuadTree tree = new QuadTree(pixels, width, height, compressionRateSlider.getValue());
 
     }//GEN-LAST:event_proccessImageButtonMouseClicked
 

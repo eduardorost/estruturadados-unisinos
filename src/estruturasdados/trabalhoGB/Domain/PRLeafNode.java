@@ -5,10 +5,14 @@
  */
 package estruturasdados.trabalhoGB.Domain;
 
-import estruturasdados.trabalhoGB.Helpers.FatherExlusionStrategy;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import estruturasdados.trabalhoGB.Helpers.PRInternalNodeTypeAdapter;
+import estruturasdados.trabalhoGB.Helpers.PRLeafNodeTypeAdapter;
+import java.io.IOException;
 
 /**
  *
@@ -17,11 +21,12 @@ import com.google.gson.GsonBuilder;
 public class PRLeafNode extends PRNode {
 
     public PRLeafNode(int x, int y, int rgb) {
+        super();
 
         this.x = x;
         this.y = y;
         this.rgb = rgb;
-        
+
     }
 
     private int x;
@@ -36,26 +41,23 @@ public class PRLeafNode extends PRNode {
         return y;
     }
 
+    public int getRgb() {
+        return rgb;
+    }
+
     @Override
     public String toJson() {
         Gson gson = new GsonBuilder()
                 .enableComplexMapKeySerialization()
-                .serializeNulls()
-                .setExclusionStrategies(new FatherExlusionStrategy())
+                .serializeNulls()                
+                .registerTypeAdapter(PRLeafNode.class, new PRLeafNodeTypeAdapter())
+                //.registerTypeAdapter(PRInternalNode.class, new PRInternalNodeTypeAdapter())
                 .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
                 .setPrettyPrinting()
                 .create();
 
         return gson.toJson(this);
     }
-
-    @Override
-    protected PRLeafNode clone() {
-        PRLeafNode clone = new PRLeafNode(x, y, rgb);        
-        clone.father = this.father;
-        clone.level = this.level;
-        clone.position = this.position;
-        return clone;
-    }
+    
 
 }

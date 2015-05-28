@@ -5,10 +5,11 @@
  */
 package estruturasdados.trabalhoGB.Domain;
 
-import estruturasdados.trabalhoGB.Helpers.FatherExlusionStrategy;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import estruturasdados.trabalhoGB.Helpers.PRInternalNodeTypeAdapter;
+import estruturasdados.trabalhoGB.Helpers.PRLeafNodeTypeAdapter;
 
 /**
  *
@@ -16,7 +17,11 @@ import com.google.gson.GsonBuilder;
  */
 public class PRInternalNode extends PRNode {
 
-    public PRInternalNode(int[] marginW, int[] marginH) {
+    public PRInternalNode(int[] marginW, int[] marginH, PRNode father) {
+        super();
+
+        this.father = father;
+        this.level = father == null ? 0 : father.getLevel() + 1;
         this.marginW = marginW;
         this.marginH = marginH;
         this.width = (marginW[1] - marginW[0]) + 1;
@@ -36,24 +41,24 @@ public class PRInternalNode extends PRNode {
     private int height;
     private int width;
 
-    public void insert(PRLeafNode node, PRNode father) {
-        node.father = father;
-        node.level = father == null ? 0 : father.getLevel() + 1;
+    public void insert(PRLeafNode node) {
         switch (this.getPositionNode(node)) {
             case NW:
                 if (nwChild == null) {
                     nwChild = node;
                     node.position = PositionEnum.NW;
+                    node.father = this;
+                    node.level = this.level + 1;
                 } else {
                     if (nwChild instanceof PRInternalNode) {
-                        ((PRInternalNode) nwChild).insert(node, this);
+                        ((PRInternalNode) nwChild).insert(node);
                     } else {
                         int[] w = {this.marginW[0], (this.marginW[0] + (this.width / 2) - 1)};
                         int[] h = {this.marginH[0], (this.marginH[0] + (this.height / 2) - 1)};
 
-                        PRInternalNode internalNode = new PRInternalNode(w, h);
-                        internalNode.insert((PRLeafNode) nwChild, this);
-                        internalNode.insert(node, this);
+                        PRInternalNode internalNode = new PRInternalNode(w, h, this);
+                        internalNode.insert((PRLeafNode) nwChild);
+                        internalNode.insert(node);
                         nwChild = internalNode;
                     }
                 }
@@ -62,16 +67,18 @@ public class PRInternalNode extends PRNode {
                 if (neChild == null) {
                     neChild = node;
                     node.position = PositionEnum.NE;
+                    node.father = this;
+                    node.level = this.level + 1;
                 } else {
                     if (neChild instanceof PRInternalNode) {
-                        ((PRInternalNode) neChild).insert(node, this);
+                        ((PRInternalNode) neChild).insert(node);
                     } else {
                         int[] w = {this.marginW[1] - ((this.width / 2) - 1), this.marginW[1]};
                         int[] h = {this.marginH[0], (this.marginH[0] + (this.height / 2) - 1)};
 
-                        PRInternalNode internalNode = new PRInternalNode(w, h);
-                        internalNode.insert((PRLeafNode) neChild, this);
-                        internalNode.insert(node, this);
+                        PRInternalNode internalNode = new PRInternalNode(w, h, this);
+                        internalNode.insert((PRLeafNode) neChild);
+                        internalNode.insert(node);
                         neChild = internalNode;
                     }
                 }
@@ -80,16 +87,18 @@ public class PRInternalNode extends PRNode {
                 if (swChild == null) {
                     swChild = node;
                     node.position = PositionEnum.SW;
+                    node.father = this;
+                    node.level = this.level + 1;
                 } else {
                     if (swChild instanceof PRInternalNode) {
-                        ((PRInternalNode) swChild).insert(node, this);
+                        ((PRInternalNode) swChild).insert(node);
                     } else {
                         int[] w = {this.marginW[0], (this.marginW[0] + (this.width / 2) - 1)};
                         int[] h = {this.marginH[1] - ((this.height / 2) - 1), this.marginH[1]};
 
-                        PRInternalNode internalNode = new PRInternalNode(w, h);
-                        internalNode.insert((PRLeafNode) swChild, this);
-                        internalNode.insert(node, this);
+                        PRInternalNode internalNode = new PRInternalNode(w, h, this);
+                        internalNode.insert((PRLeafNode) swChild);
+                        internalNode.insert(node);
                         swChild = internalNode;
                     }
                 }
@@ -98,16 +107,18 @@ public class PRInternalNode extends PRNode {
                 if (seChild == null) {
                     seChild = node;
                     node.position = PositionEnum.SE;
+                    node.father = this;
+                    node.level = this.level + 1;
                 } else {
                     if (seChild instanceof PRInternalNode) {
-                        ((PRInternalNode) seChild).insert(node, this);
+                        ((PRInternalNode) seChild).insert(node);
                     } else {
                         int[] w = {this.marginW[1] - ((this.width / 2) - 1), this.marginW[1]};
                         int[] h = {this.marginH[1] - ((this.height / 2) - 1), this.marginH[1]};
 
-                        PRInternalNode internalNode = new PRInternalNode(w, h);
-                        internalNode.insert((PRLeafNode) seChild, this);
-                        internalNode.insert(node, this);
+                        PRInternalNode internalNode = new PRInternalNode(w, h, this);
+                        internalNode.insert((PRLeafNode) seChild);
+                        internalNode.insert(node);
                         seChild = internalNode;
                     }
                 }
@@ -136,7 +147,8 @@ public class PRInternalNode extends PRNode {
         Gson gson = new GsonBuilder()
                 .enableComplexMapKeySerialization()
                 .serializeNulls()
-                .setExclusionStrategies(new FatherExlusionStrategy())
+                .registerTypeAdapter(PRLeafNode.class, new PRLeafNodeTypeAdapter())
+                .registerTypeAdapter(PRInternalNode.class, new PRInternalNodeTypeAdapter())
                 .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
                 .setPrettyPrinting()
                 .create();
@@ -144,22 +156,41 @@ public class PRInternalNode extends PRNode {
         return gson.toJson(this);
     }
     
-    @Override
-    protected PRInternalNode clone() {
-        PRInternalNode clone = new PRInternalNode(marginW, marginH);
-        clone.father = this.father;
-        clone.level = this.level;
-        clone.position = this.position;
-        clone.nwChild = this.nwChild instanceof PRInternalNode ? ((PRInternalNode)this.nwChild).clone() : ((PRLeafNode)this.nwChild).clone();
-        clone.neChild = this.neChild instanceof PRInternalNode ? ((PRInternalNode)this.neChild).clone() : ((PRLeafNode)this.neChild).clone();
-        clone.swChild = this.swChild instanceof PRInternalNode ? ((PRInternalNode)this.swChild).clone() : ((PRLeafNode)this.swChild).clone();
-        clone.seChild = this.seChild instanceof PRInternalNode ? ((PRInternalNode)this.seChild).clone() : ((PRLeafNode)this.seChild).clone();
-        
-        return clone;
+
+    public PRInternalNode CompressChilds(int compressionRate) {
+        throw new UnsupportedOperationException();
     }
-    
-    public void CompressChilds(int quality)
-    {
+
+    public PRNode getNwChild() {
+        return nwChild;
+    }
+
+    public PRNode getNeChild() {
+        return neChild;
+    }
+
+    public PRNode getSwChild() {
+        return swChild;
+    }
+
+    public PRNode getSeChild() {
+        return seChild;
+    }
+
+    public int[] getMarginW() {
+        return marginW;
+    }
+
+    public int[] getMarginH() {
+        return marginH;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
 }

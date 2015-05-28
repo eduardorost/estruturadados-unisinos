@@ -16,7 +16,7 @@ import java.nio.file.Paths;
  */
 public class QuadTree {
 
-    public QuadTree(int[] pixels, int width, int height) {
+    public QuadTree(int[] pixels, int width, int height, int compressionRate) {
         this.width = Math.max(width, height);
         this.height = Math.max(width, height);
 
@@ -27,18 +27,7 @@ public class QuadTree {
 
         int[] w = {0, this.width - 1};
         int[] h = {0, this.height - 1};
-        this.root = new PRInternalNode(w, h);
-
-        //PARA TESTE
-        File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
-
-        if (!directory.exists()) {
-            directory.mkdir();
-        } else {
-            for (File file : directory.listFiles()) {
-                file.delete();
-            }
-        }
+        this.root = new PRInternalNode(w, h, null);
 
         for (int i = 0; i < pixels.length; i++) {
             //coluna
@@ -47,13 +36,21 @@ public class QuadTree {
             int y = Math.floorDiv(i, height);
             System.out.println(i);
 
-            ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]), null);
+            ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]));
         }
-        
-        this.compressedRoot = this.root instanceof PRInternalNode ? ((PRInternalNode)this.root).clone() : ((PRLeafNode)this.root).clone();
 
-        //PARA TESTE
+        //this.compressedRoot = this.root instanceof PRLeafNode ? this.root : ((PRInternalNode) root).CompressChilds(compressionRate);
+
         try {
+            File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
+
+            if (!directory.exists()) {
+                directory.mkdir();
+            } else {
+                for (File file : directory.listFiles()) {
+                    file.delete();
+                }
+            }
             File file = new File(Paths.get(directory.getAbsolutePath(), "quadtree.json").toString());
 
             if (!file.exists()) {
