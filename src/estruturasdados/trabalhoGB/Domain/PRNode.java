@@ -72,4 +72,6 @@ public abstract class PRNode {
 
     public abstract String toJson();
 
+    public abstract PRNode clone();
+
 }

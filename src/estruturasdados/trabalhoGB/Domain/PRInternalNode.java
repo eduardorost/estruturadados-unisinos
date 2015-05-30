@@ -10,6 +10,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import estruturasdados.trabalhoGB.Helpers.PRInternalNodeTypeAdapter;
 import estruturasdados.trabalhoGB.Helpers.PRLeafNodeTypeAdapter;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,11 +31,26 @@ public class PRInternalNode extends PRNode {
         this.height = (marginH[1] - marginH[0]) + 1;
     }
 
+    private PRInternalNode(PRNode nwChild, PRNode neChild, PRNode swChild, PRNode seChild, PositionEnum position, int[] marginW, int[] marginH, int height, int width) {
+        super();
+
+        this.nwChild = nwChild;
+        this.neChild = neChild;
+        this.swChild = swChild;
+        this.seChild = seChild;
+        this.marginW = marginW;
+        this.marginH = marginH;
+        this.height = height;
+        this.width = width;
+        this.position = position;
+    }
+
     //LEMBRAR QUE ESSES FILHOS PODEM SER INTERNOS OU FOLHAS, FAZER O TYPEOF PARA IDENTIFICAR QUAL TIPO ELE É.
     private PRNode nwChild;
     private PRNode neChild;
     private PRNode swChild;
     private PRNode seChild;
+    private PRLeafNode compressedChild;
 
     //Margens do quadrante
     private int[] marginW;
@@ -142,6 +160,22 @@ public class PRInternalNode extends PRNode {
         }
     }
 
+    private PositionEnum getPositionNode(PRInternalNode node) {
+        if (node.marginW[0] >= (this.marginW[0] + this.marginW[1] + 1) / 2) {
+            if (node.marginH[0] >= (this.marginH[0] + this.marginH[1] + 1) / 2) {
+                return PositionEnum.SE;
+            } else {
+                return PositionEnum.NE;
+            }
+        } else {
+            if (node.marginH[0] >= (this.marginH[0] + this.marginH[1] + 1) / 2) {
+                return PositionEnum.SW;
+            } else {
+                return PositionEnum.NW;
+            }
+        }
+    }
+
     @Override
     public String toJson() {
         Gson gson = new GsonBuilder()
@@ -155,10 +189,88 @@ public class PRInternalNode extends PRNode {
 
         return gson.toJson(this);
     }
-    
 
-    public PRInternalNode CompressChilds(int compressionRate) {
-        throw new UnsupportedOperationException();
+    public PRNode CompressChilds(int compressionRate) {
+        List<PRNode> childs = new ArrayList<>();
+        List<PRNode> compressed = new ArrayList<>();
+        if (nwChild != null) {
+            childs.add(nwChild.clone());
+        }
+        if (neChild != null) {
+            childs.add(neChild.clone());
+        }
+        if (swChild != null) {
+            childs.add(swChild.clone());
+        }
+        if (seChild != null) {
+            childs.add(seChild.clone());
+        }
+
+        boolean canCompress = true;
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        while (!childs.isEmpty()) {
+            PRNode child = childs.remove(0);
+            if (child instanceof PRLeafNode) {
+                PRLeafNode leafChild = (PRLeafNode) child;
+                while (!childs.isEmpty()) {
+                    PRLeafNode c = (PRLeafNode) childs.remove(0);
+                    if (c instanceof PRLeafNode) {
+                        int distance = leafChild.distanceColor(c.getColor());
+                        canCompress = canCompress && (distance / 2.55) < compressionRate;
+                        if (!canCompress) {
+                            break;
+                        }
+                        r += c.getColor().getRed();
+                        g += c.getColor().getGreen();
+                        b += c.getColor().getBlue();
+                    }
+                }
+                if (canCompress) {
+                    r += leafChild.getColor().getRed();
+                    g += leafChild.getColor().getGreen();
+                    b += leafChild.getColor().getBlue();
+
+                    compressed.add(new PRLeafNode(0, 0, new Color(r / 4, g / 4, b / 4).getRGB()));
+                } else {
+                    break;
+                }
+            } else {
+                compressed.add(((PRInternalNode) child).CompressChilds(compressionRate));
+            }
+        }
+
+        PRInternalNode node = this.clone();
+        if (compressed.size() == 1) {
+            node.compressedChild = (PRLeafNode) compressed.remove(0);
+            node.compressedChild.father = this;
+            node.compressedChild.level = this.level + 1;
+            node.cleanChilds();
+        } else {
+            for (PRNode c : compressed) {
+                switch (node.getPositionNode((PRInternalNode) c)) {
+                    case NW:
+                        node.nwChild = c;
+                        break;
+                    case NE:
+                        node.neChild = c;
+                        break;
+                    case SW:
+                        node.swChild = c;
+                        break;
+                    case SE:
+                        node.seChild = c;
+                        break;
+                }
+            }
+        }
+
+        return node;
+    }
+
+    public PRLeafNode getCompressedChild() {
+        return compressedChild;
     }
 
     public PRNode getNwChild() {
@@ -191,6 +303,18 @@ public class PRInternalNode extends PRNode {
 
     public int getWidth() {
         return width;
+    }
+
+    @Override
+    public PRInternalNode clone() {
+        return new PRInternalNode(nwChild, neChild, swChild, seChild, position, marginW, marginH, height, width);
+    }
+
+    private void cleanChilds() {
+        this.nwChild = null;
+        this.neChild = null;
+        this.swChild = null;
+        this.seChild = null;
     }
 
 }

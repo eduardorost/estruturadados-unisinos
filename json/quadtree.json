@@ -1,188 +1,193 @@
 {
-  "id": 14718,
+  "id": 482,
   "level": 0,
   "position": null,
   "father": null,
   "nwChild": {
-    "id": 14721,
+    "id": 485,
     "level": 1,
-    "father": 14718,
+    "father": 482,
     "nwChild": {
-      "id": 14719,
+      "id": 483,
       "level": 2,
       "position": "NW",
-      "father": 14721,
+      "father": 485,
       "x": 0,
       "y": 0,
-      "rgb": "R: 0 G: 0 B: 0"
+      "rgb": "R: 0 G: 0 B: 255"
     },
     "neChild": {
-      "id": 14720,
+      "id": 484,
       "level": 2,
       "position": "NE",
-      "father": 14721,
+      "father": 485,
       "x": 1,
       "y": 0,
-      "rgb": "R: 100 G: 0 B: 0"
+      "rgb": "R: 0 G: 0 B: 255"
     },
     "swChild": {
-      "id": 14725,
+      "id": 489,
       "level": 2,
       "position": "SW",
-      "father": 14721,
+      "father": 485,
       "x": 0,
       "y": 1,
-      "rgb": "R: 0 G: 0 B: 0"
+      "rgb": "R: 0 G: 0 B: 255"
     },
     "seChild": {
-      "id": 14726,
+      "id": 490,
       "level": 2,
       "position": "SE",
-      "father": 14721,
+      "father": 485,
       "x": 1,
       "y": 1,
-      "rgb": "R: 0 G: 255 B: 175"
+      "rgb": "R: 0 G: 0 B: 255"
     },
+    "compressedChild": "",
     "marginW": "[ 0, 1 ]",
     "marginH": "[ 0, 1 ]",
     "width": 2,
     "height": 2
   },
   "neChild": {
-    "id": 14724,
+    "id": 488,
     "level": 1,
-    "father": 14718,
+    "father": 482,
     "nwChild": {
-      "id": 14722,
+      "id": 486,
       "level": 2,
       "position": "NW",
-      "father": 14724,
+      "father": 488,
       "x": 2,
       "y": 0,
       "rgb": "R: 0 G: 0 B: 0"
     },
     "neChild": {
-      "id": 14723,
+      "id": 487,
       "level": 2,
       "position": "NE",
-      "father": 14724,
+      "father": 488,
       "x": 3,
       "y": 0,
-      "rgb": "R: 255 G: 0 B: 255"
+      "rgb": "R: 0 G: 0 B: 0"
     },
     "swChild": {
-      "id": 14727,
+      "id": 491,
       "level": 2,
       "position": "SW",
-      "father": 14724,
+      "father": 488,
       "x": 2,
       "y": 1,
       "rgb": "R: 0 G: 0 B: 0"
     },
     "seChild": {
-      "id": 14728,
+      "id": 492,
       "level": 2,
       "position": "SE",
-      "father": 14724,
+      "father": 488,
       "x": 3,
       "y": 1,
       "rgb": "R: 0 G: 0 B: 0"
     },
+    "compressedChild": "",
     "marginW": "[ 2, 3 ]",
     "marginH": "[ 0, 1 ]",
     "width": 2,
     "height": 2
   },
   "swChild": {
-    "id": 14731,
+    "id": 495,
     "level": 1,
-    "father": 14718,
+    "father": 482,
     "nwChild": {
-      "id": 14729,
+      "id": 493,
       "level": 2,
       "position": "NW",
-      "father": 14731,
+      "father": 495,
       "x": 0,
       "y": 2,
-      "rgb": "R: 0 G: 0 B: 0"
+      "rgb": "R: 255 G: 0 B: 0"
     },
     "neChild": {
-      "id": 14730,
+      "id": 494,
       "level": 2,
       "position": "NE",
-      "father": 14731,
+      "father": 495,
       "x": 1,
       "y": 2,
-      "rgb": "R: 0 G: 0 B: 0"
+      "rgb": "R: 255 G: 0 B: 0"
     },
     "swChild": {
-      "id": 14735,
+      "id": 499,
       "level": 2,
       "position": "SW",
-      "father": 14731,
+      "father": 495,
       "x": 0,
       "y": 3,
-      "rgb": "R: 255 G: 0 B: 255"
+      "rgb": "R: 255 G: 0 B: 0"
     },
     "seChild": {
-      "id": 14736,
+      "id": 500,
       "level": 2,
       "position": "SE",
-      "father": 14731,
+      "father": 495,
       "x": 1,
       "y": 3,
-      "rgb": "R: 0 G: 0 B: 0"
+      "rgb": "R: 255 G: 0 B: 0"
     },
+    "compressedChild": "",
     "marginW": "[ 0, 1 ]",
     "marginH": "[ 2, 3 ]",
     "width": 2,
     "height": 2
   },
   "seChild": {
-    "id": 14734,
+    "id": 498,
     "level": 1,
-    "father": 14718,
+    "father": 482,
     "nwChild": {
-      "id": 14732,
+      "id": 496,
       "level": 2,
       "position": "NW",
-      "father": 14734,
+      "father": 498,
       "x": 2,
       "y": 2,
-      "rgb": "R: 0 G: 15 B: 175"
+      "rgb": "R: 255 G: 255 B: 255"
     },
     "neChild": {
-      "id": 14733,
+      "id": 497,
       "level": 2,
       "position": "NE",
-      "father": 14734,
+      "father": 498,
       "x": 3,
       "y": 2,
-      "rgb": "R: 0 G: 0 B: 0"
+      "rgb": "R: 255 G: 255 B: 255"
     },
     "swChild": {
-      "id": 14737,
+      "id": 501,
       "level": 2,
       "position": "SW",
-      "father": 14734,
+      "father": 498,
       "x": 2,
       "y": 3,
-      "rgb": "R: 0 G: 0 B: 0"
+      "rgb": "R: 255 G: 255 B: 255"
     },
     "seChild": {
-      "id": 14738,
+      "id": 502,
       "level": 2,
       "position": "SE",
-      "father": 14734,
+      "father": 498,
       "x": 3,
       "y": 3,
       "rgb": "R: 255 G: 255 B: 255"
     },
+    "compressedChild": "",
     "marginW": "[ 2, 3 ]",
     "marginH": "[ 2, 3 ]",
     "width": 2,
     "height": 2
   },
+  "compressedChild": "",
   "marginW": "[ 0, 3 ]",
   "marginH": "[ 0, 3 ]",
   "width": 4,

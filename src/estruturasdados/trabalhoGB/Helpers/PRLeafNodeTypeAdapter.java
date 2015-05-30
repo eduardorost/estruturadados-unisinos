@@ -21,8 +21,6 @@ public class PRLeafNodeTypeAdapter extends TypeAdapter<PRLeafNode>{
     @Override
     public void write(JsonWriter writer, PRLeafNode node) throws IOException {
         
-        Color c = new Color(node.getRgb());
-        
         writer.beginObject();
             writer.name("id").value(node.getId());
             writer.name("level").value(node.getLevel());
@@ -31,6 +29,8 @@ public class PRLeafNodeTypeAdapter extends TypeAdapter<PRLeafNode>{
         
             writer.name("x").value(node.getX());
             writer.name("y").value(node.getY());
+            
+            Color c = node.getColor();
             writer.name("rgb").value("R: " + c.getRed() + " G: " + c.getGreen() + " B: " + c.getBlue());
         writer.endObject();
         

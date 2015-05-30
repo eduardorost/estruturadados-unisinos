@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Paths;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,12 +35,11 @@ public class QuadTree {
             int x = i % width;
             //linha
             int y = Math.floorDiv(i, height);
-            System.out.println(i);
 
             ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]));
         }
 
-        //this.compressedRoot = this.root instanceof PRLeafNode ? this.root : ((PRInternalNode) root).CompressChilds(compressionRate);
+        this.compressedRoot = this.root instanceof PRLeafNode ? this.root : ((PRInternalNode) root).CompressChilds(compressionRate);
 
         try {
             File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
@@ -52,14 +52,26 @@ public class QuadTree {
                 }
             }
             File file = new File(Paths.get(directory.getAbsolutePath(), "quadtree.json").toString());
+            File compressedFile = new File(Paths.get(directory.getAbsolutePath(), "quadtree_compressed.json").toString());
 
             if (!file.exists()) {
                 file.createNewFile();
             }
-
+            if (!compressedFile.exists()) {
+                file.createNewFile();
+            }
+            String json = this.toJson();
+            String compressedJson = this.compressedRoot.toJson();
             FileWriter writer = new FileWriter(file);
-            writer.write(this.toJson());
+            FileWriter compressedWriter = new FileWriter(compressedFile);
+            writer.write(json);
+            compressedWriter.write(compressedJson);
+            
+            //TODO: Fazer um to string, inviavel apresentar o JSON
+            //JOptionPane.showMessageDialog(null, json);
+            //JOptionPane.showMessageDialog(null, compressedJson);
             writer.close();
+            compressedWriter.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,10 +90,4 @@ public class QuadTree {
     public String toJson() {
         return root.toJson();
     }
-
-    public void CompressImage(int quality) {
-        //return new int[]{1, 2};
-
-    }
-
 }
