@@ -276,9 +276,9 @@ public class Index extends javax.swing.JFrame {
         QuadTree tree = new QuadTree(pixels, width, height, compressionRateSlider.getValue());
 
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Comprimida");
-        int[] teste = tree.getCompressedArray();
+        
         compressedImagePanel = new ImagePanel();
-        compressedImagePanel.update(teste, width, height);
+        compressedImagePanel.update(tree.getCompressedArray(), width, height);
         compressedPanel.add(compressedImagePanel);
         compressedPanel.setSize(width, height);
         compressedPanel.setMinimumSize(compressedPanel.getSize());

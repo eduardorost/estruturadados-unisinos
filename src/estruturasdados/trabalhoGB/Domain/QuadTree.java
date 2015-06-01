@@ -22,6 +22,8 @@ public class QuadTree {
     public QuadTree(int[] pixels, int width, int height, int compressionRate) {
         this.width = Math.max(width, height);
         this.height = Math.max(width, height);
+        this.originalWidth = width;
+        this.originalHeight = height;
 
         if (pixels.length == 0) {
             this.root = new PRLeafNode(0, 0, pixels[0]);
@@ -35,9 +37,9 @@ public class QuadTree {
 
         for (int i = 0; i < pixels.length; i++) {
             //coluna
-            int x = i % width;
+            int x = i % originalWidth;
             //linha
-            int y = Math.floorDiv(i, height);
+            int y = Math.floorDiv(i, originalWidth);
 
             ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]));
         }
@@ -84,6 +86,8 @@ public class QuadTree {
 
     private int width;
     private int height;
+    private int originalWidth;
+    private int originalHeight;
 
     //ARVORE DA IMAGEM ORIGINAL
     private PRNode root;
@@ -100,7 +104,7 @@ public class QuadTree {
         if(compressedRoot instanceof PRInternalNode)
         {
             PRInternalNode node = (PRInternalNode) compressedRoot;
-            return node.getCompressedArray(width * height);
+            return node.getCompressedArray(originalWidth, originalHeight);
         }
         else
         {

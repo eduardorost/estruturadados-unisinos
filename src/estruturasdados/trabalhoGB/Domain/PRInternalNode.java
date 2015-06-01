@@ -319,24 +319,23 @@ public class PRInternalNode extends PRNode {
         this.seChild = null;
     }
 
-    public int[] getCompressedArray(int arraySize) {
-        int[] pixels = new int[arraySize];
-        int sideSize = (int) Math.sqrt(arraySize);
+    public int[] getCompressedArray(int width, int height) {
+        int[] pixels = new int[width * height];
 
         if (compressedChild != null) {
             for (int i = marginW[0]; i <= marginW[1]; i++) {
                 for (int j = marginH[0]; j <= marginH[1]; j++) {
-                    pixels[i + (j * sideSize)] = compressedChild.getRgb();
+                    pixels[i + (j * width)] = compressedChild.getRgb();
                 }
             }
         } else {
             if (swChild != null) {
                 if (swChild instanceof PRLeafNode) {
                     PRLeafNode node = (PRLeafNode) swChild;
-                    pixels[node.getX() + (node.getY() * node.getX())] = node.getRgb();
+                    pixels[node.getX() + (node.getY() * width)] = node.getRgb();
                 } else {
                     PRInternalNode node = (PRInternalNode) swChild;
-                    int[] array = node.getCompressedArray(arraySize);
+                    int[] array = node.getCompressedArray(width, height);
                     for (int i = 0; i < array.length; i++) {
                         if (array[i] != 0) {
                             pixels[i] = array[i];
@@ -347,10 +346,10 @@ public class PRInternalNode extends PRNode {
             if (seChild != null) {
                 if (seChild instanceof PRLeafNode) {
                     PRLeafNode node = (PRLeafNode) seChild;
-                    pixels[node.getX() + (node.getY() * node.getX())] = node.getRgb();
+                    pixels[node.getX() + (node.getY() * width)] = node.getRgb();
                 } else {
                     PRInternalNode node = (PRInternalNode) seChild;
-                    int[] array = node.getCompressedArray(arraySize);
+                    int[] array = node.getCompressedArray(width, height);
                     for (int i = 0; i < array.length; i++) {
                         if (array[i] != 0) {
                             pixels[i] = array[i];
@@ -361,10 +360,10 @@ public class PRInternalNode extends PRNode {
             if (nwChild != null) {
                 if (nwChild instanceof PRLeafNode) {
                     PRLeafNode node = (PRLeafNode) nwChild;
-                    pixels[node.getX() + (node.getY() * node.getX())] = node.getRgb();
+                    pixels[node.getX() + (node.getY() * width)] = node.getRgb();
                 } else {
                     PRInternalNode node = (PRInternalNode) nwChild;
-                    int[] array = node.getCompressedArray(arraySize);
+                    int[] array = node.getCompressedArray(width, height);
                     for (int i = 0; i < array.length; i++) {
                         if (array[i] != 0) {
                             pixels[i] = array[i];
@@ -375,10 +374,10 @@ public class PRInternalNode extends PRNode {
             if (neChild != null) {
                 if (neChild instanceof PRLeafNode) {
                     PRLeafNode node = (PRLeafNode) neChild;
-                    pixels[node.getX() + (node.getY() * node.getX())] = node.getRgb();
+                    pixels[node.getX() + (node.getY() * width)] = node.getRgb();
                 } else {
                     PRInternalNode node = (PRInternalNode) neChild;
-                    int[] array = node.getCompressedArray(arraySize);
+                    int[] array = node.getCompressedArray(width, height);
                     for (int i = 0; i < array.length; i++) {
                         if (array[i] != 0) {
                             pixels[i] = array[i];
