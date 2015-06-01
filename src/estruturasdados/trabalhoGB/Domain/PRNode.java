@@ -29,7 +29,11 @@ public abstract class PRNode {
         String path = Paths.get(System.getProperty("user.dir"), "config.properties").toString();
         try {
             prop.load(new FileInputStream(path));
-            this.id = Integer.valueOf(prop.getProperty("nodeId", "1"));
+            try {
+                this.id = Integer.valueOf(prop.getProperty("nodeId", "1"));
+            } catch (Exception e) {
+                this.id = 1;
+            }
             prop.setProperty("nodeId", String.valueOf(this.id + 1));
 
         } catch (IOException e) {

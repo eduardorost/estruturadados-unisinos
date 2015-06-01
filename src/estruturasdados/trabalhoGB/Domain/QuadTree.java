@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,6 +30,7 @@ public class QuadTree {
 
         int[] w = {0, this.width - 1};
         int[] h = {0, this.height - 1};
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Montando QUADTREE");
         this.root = new PRInternalNode(w, h, null);
 
         for (int i = 0; i < pixels.length; i++) {
@@ -38,9 +41,10 @@ public class QuadTree {
 
             ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]));
         }
-
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Comprimindo QUADTREE");
         this.compressedRoot = this.root instanceof PRLeafNode ? this.root : ((PRInternalNode) root).CompressChilds(compressionRate);
 
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Gravando JSONs");
         try {
             File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
 
@@ -89,5 +93,18 @@ public class QuadTree {
 
     public String toJson() {
         return root.toJson();
+    }
+    
+    public int[] getCompressedArray()
+    {
+        if(compressedRoot instanceof PRInternalNode)
+        {
+            PRInternalNode node = (PRInternalNode) compressedRoot;
+            return node.getCompressedArray(width * height);
+        }
+        else
+        {
+            return new int[] { ((PRLeafNode) compressedRoot).getRgb() };
+        }
     }
 }

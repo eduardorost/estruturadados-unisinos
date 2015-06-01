@@ -35,12 +35,15 @@
               <Component id="compressionRateField" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
               <Component id="proccessImageButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="150" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="41" max="32767" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="panel" max="32767" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="originalPanel" max="32767" attributes="0"/>
+                  <Component id="compressedPanel" alignment="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -52,17 +55,19 @@
                   <Component id="selectFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="filePathField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="compressionRateSlider" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="compressionRateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="compressionRateField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="proccessImageButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-              <Component id="panel" max="32767" attributes="0"/>
-              <EmptySpace pref="18" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="originalPanel" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="compressedPanel" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -101,6 +106,9 @@
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="compressionRateField.setText(compressionRateSlider.getValue() + &quot; %&quot;);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="proccessImageButton">
       <Properties>
@@ -113,20 +121,35 @@
         <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="proccessImageButton.setEnabled(false);"/>
       </AuxValues>
     </Component>
-    <Container class="java.awt.Panel" name="panel">
+    <Container class="java.awt.Panel" name="originalPanel">
       <AccessibilityProperties>
-        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
+        <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="" postCode="imagePanel = new ImagePanel();&#xa;compressedImagePanel = new ImagePanel();"/>
       </AccessibilityProperties>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="413" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="144" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+    <Container class="java.awt.Panel" name="compressedPanel">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="363" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>

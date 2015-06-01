@@ -14,16 +14,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -54,7 +53,8 @@ public class Index extends javax.swing.JFrame {
         filePathField = new javax.swing.JTextField();
         compressionRateField = new javax.swing.JTextField();
         proccessImageButton = new javax.swing.JButton();
-        panel = new java.awt.Panel();
+        originalPanel = new java.awt.Panel();
+        compressedPanel = new java.awt.Panel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,6 +81,7 @@ public class Index extends javax.swing.JFrame {
         filePathField.setEditable(false);
 
         compressionRateField.setEditable(false);
+        compressionRateField.setText(compressionRateSlider.getValue() + " %");
 
         proccessImageButton.setText("Processar Imagem");
         proccessImageButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -90,15 +91,26 @@ public class Index extends javax.swing.JFrame {
         });
         proccessImageButton.setEnabled(false);
 
-        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
-        panel.setLayout(panelLayout);
-        panelLayout.setHorizontalGroup(
-            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 413, Short.MAX_VALUE)
+        javax.swing.GroupLayout originalPanelLayout = new javax.swing.GroupLayout(originalPanel);
+        originalPanel.setLayout(originalPanelLayout);
+        originalPanelLayout.setHorizontalGroup(
+            originalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        panelLayout.setVerticalGroup(
-            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 144, Short.MAX_VALUE)
+        originalPanelLayout.setVerticalGroup(
+            originalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 14, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout compressedPanelLayout = new javax.swing.GroupLayout(compressedPanel);
+        compressedPanel.setLayout(compressedPanelLayout);
+        compressedPanelLayout.setHorizontalGroup(
+            compressedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 363, Short.MAX_VALUE)
+        );
+        compressedPanelLayout.setVerticalGroup(
+            compressedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 14, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -116,11 +128,13 @@ public class Index extends javax.swing.JFrame {
                 .addComponent(compressionRateField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(66, 66, 66)
                 .addComponent(proccessImageButton)
-                .addGap(0, 150, Short.MAX_VALUE))
+                .addGap(0, 41, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(originalPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(compressedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,12 +150,16 @@ public class Index extends javax.swing.JFrame {
                     .addComponent(compressionRateLabel)
                     .addComponent(compressionRateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(proccessImageButton))
-                .addGap(19, 19, 19)
-                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(originalPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(compressedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        panel.getAccessibleContext().setAccessibleDescription("");
+        originalPanel.getAccessibleContext().setAccessibleDescription("");
+        imagePanel = new ImagePanel();
+        compressedImagePanel = new ImagePanel();
 
         pack();
         setLocationRelativeTo(null);
@@ -177,8 +195,10 @@ public class Index extends javax.swing.JFrame {
                 inputFile = fc.getSelectedFile();
                 filePathField.setText(inputFile.getAbsolutePath());
 
-                panel.removeAll();
-                panel.repaint();
+                originalPanel.removeAll();
+                originalPanel.repaint();
+                compressedPanel.removeAll();
+                compressedPanel.repaint();
             }
 
         }
@@ -223,6 +243,7 @@ public class Index extends javax.swing.JFrame {
 
         int[] pixels = new int[width * height];
 
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Identificando RGBs");
         for (int i = 0; i < pixels.length; i++) {
             int r = Integer.valueOf(lines.remove(0));
             int g = Integer.valueOf(lines.remove(0));
@@ -238,18 +259,37 @@ public class Index extends javax.swing.JFrame {
             pixels[i] = 0xFF000000 | r | g | b;
         }
 
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Original");
         imagePanel = new ImagePanel();
         imagePanel.update(pixels, width, height);
-        panel.add(imagePanel);
-        setSize(Math.max(getWidth(), width * 2), Math.max(getHeight(), height * 2));
-        setPreferredSize(getSize());
-        setMinimumSize(getSize());
-        panel.setVisible(true);
-        panel.repaint();
-        
-        pack();
+        originalPanel.add(imagePanel);
+        originalPanel.setSize(width, height);
+        originalPanel.setMinimumSize(originalPanel.getSize());
+        originalPanel.setPreferredSize(getSize());
+        //setSize(Math.max(getWidth(), width * 2), Math.max(getHeight(), height * 2));
+        //setPreferredSize(getSize());
+        //setMinimumSize(getSize());
+        originalPanel.setVisible(true);
+        originalPanel.repaint();
 
+        //pack();
         QuadTree tree = new QuadTree(pixels, width, height, compressionRateSlider.getValue());
+
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Comprimida");
+        int[] teste = tree.getCompressedArray();
+        compressedImagePanel = new ImagePanel();
+        compressedImagePanel.update(teste, width, height);
+        compressedPanel.add(compressedImagePanel);
+        compressedPanel.setSize(width, height);
+        compressedPanel.setMinimumSize(compressedPanel.getSize());
+        compressedPanel.setPreferredSize(getSize());
+        //setSize(Math.max(getWidth(), width * 2), Math.max(getHeight(), height * 2));
+        //setPreferredSize(getSize());
+        //setMinimumSize(getSize());
+        compressedPanel.setVisible(true);
+        compressedPanel.repaint();
+
+        pack();
 
     }//GEN-LAST:event_proccessImageButtonMouseClicked
 
@@ -289,15 +329,17 @@ public class Index extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Panel compressedPanel;
     private javax.swing.JTextField compressionRateField;
     private javax.swing.JLabel compressionRateLabel;
     private javax.swing.JSlider compressionRateSlider;
     private javax.swing.JTextField filePathField;
-    private java.awt.Panel panel;
+    private java.awt.Panel originalPanel;
     private javax.swing.JButton proccessImageButton;
     private javax.swing.JButton selectFileButton;
     // End of variables declaration//GEN-END:variables
     private File inputFile;
     private boolean invalidFile;
     private ImagePanel imagePanel;
+    private ImagePanel compressedImagePanel;
 }
