@@ -158,8 +158,6 @@ public class Index extends javax.swing.JFrame {
         );
 
         originalPanel.getAccessibleContext().setAccessibleDescription("");
-        imagePanel = new ImagePanel();
-        compressedImagePanel = new ImagePanel();
 
         pack();
         setLocationRelativeTo(null);
@@ -191,6 +189,7 @@ public class Index extends javax.swing.JFrame {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             if (inputFile == null || !fc.getSelectedFile().getAbsolutePath().equals(inputFile.getAbsolutePath())) {
                 proccessImageButton.setEnabled(true);
+                changeFile = true;
 
                 inputFile = fc.getSelectedFile();
                 filePathField.setText(inputFile.getAbsolutePath());
@@ -209,6 +208,8 @@ public class Index extends javax.swing.JFrame {
         compressionRateField.setText(source.getValue() + " %");
         if (!invalidFile) {
             proccessImageButton.setEnabled(true);
+                compressedPanel.removeAll();
+                compressedPanel.repaint();
         }
     }//GEN-LAST:event_compressionRateSliderStateChanged
 
@@ -220,72 +221,70 @@ public class Index extends javax.swing.JFrame {
 
         proccessImageButton.setEnabled(false);
 
-        List<String> lines = null;
+        if (changeFile) {
+            List<String> lines = null;
 
-        try {
-            lines = Files.readAllLines(Paths.get(inputFile.getAbsolutePath()));
-        } catch (IOException ex) {
-            Logger.getLogger(trabalhoGB.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                lines = Files.readAllLines(Paths.get(inputFile.getAbsolutePath()));
+            } catch (IOException ex) {
+                Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (!"P3".equals(lines.remove(0).toUpperCase())) {
+                JOptionPane.showMessageDialog(this, "Tipo do arquivo incorreto.", "Dialog", JOptionPane.ERROR_MESSAGE);
+                invalidFile = true;
+                return;
+            }
+
+            invalidFile = false;
+
+            String[] size = lines.remove(0).split(" ");
+            int width = Integer.valueOf(size[0]);
+            int height = Integer.valueOf(size[1]);
+
+            int maxrgb = Integer.valueOf(lines.remove(0));
+
+            int[] pixels = new int[width * height];
+
+            System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Identificando RGBs");
+            for (int i = 0; i < pixels.length; i++) {
+                int r = Integer.valueOf(lines.remove(0));
+                int g = Integer.valueOf(lines.remove(0));
+                int b = Integer.valueOf(lines.remove(0));
+
+                //0x00FF0000 -> hexadecimal do vermelho
+                //0x0000FF00 -> hexadecimal do verde
+                //0x000000FF -> hexadecimal do azul
+                r = (r << 16) & 0x00FF0000;
+                g = (g << 8) & 0x0000FF00;
+                b = b & 0x000000FF;
+
+                pixels[i] = 0xFF000000 | r | g | b;
+            }
+
+            System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Original");
+            imagePanel = new ImagePanel(width, height);
+            imagePanel.update(pixels, width, height);
+            originalPanel.add(imagePanel);
+            originalPanel.setSize(width, height);
+            originalPanel.setMinimumSize(originalPanel.getSize());
+            originalPanel.setPreferredSize(getSize());
+            originalPanel.setVisible(true);
+            originalPanel.repaint();
+
+            //pack();
+            tree = new QuadTree(pixels, width, height, compressionRateSlider.getValue());
+            changeFile = false;
+        } else {
+            tree.compressImage(compressionRateSlider.getValue());
         }
-        if (!"P3".equals(lines.remove(0).toUpperCase())) {
-            JOptionPane.showMessageDialog(this, "Tipo do arquivo incorreto.", "Dialog", JOptionPane.ERROR_MESSAGE);
-            invalidFile = true;
-            return;
-        }
-
-        invalidFile = false;
-
-        String[] size = lines.remove(0).split(" ");
-        int width = Integer.valueOf(size[0]);
-        int height = Integer.valueOf(size[1]);
-
-        int maxrgb = Integer.valueOf(lines.remove(0));
-
-        int[] pixels = new int[width * height];
-
-        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Identificando RGBs");
-        for (int i = 0; i < pixels.length; i++) {
-            int r = Integer.valueOf(lines.remove(0));
-            int g = Integer.valueOf(lines.remove(0));
-            int b = Integer.valueOf(lines.remove(0));
-
-            //0x00FF0000 -> hexadecimal do vermelho
-            //0x0000FF00 -> hexadecimal do verde
-            //0x000000FF -> hexadecimal do azul
-            r = (r << 16) & 0x00FF0000;
-            g = (g << 8) & 0x0000FF00;
-            b = b & 0x000000FF;
-
-            pixels[i] = 0xFF000000 | r | g | b;
-        }
-
-        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Original");
-        imagePanel = new ImagePanel();
-        imagePanel.update(pixels, width, height);
-        originalPanel.add(imagePanel);
-        originalPanel.setSize(width, height);
-        originalPanel.setMinimumSize(originalPanel.getSize());
-        originalPanel.setPreferredSize(getSize());
-        //setSize(Math.max(getWidth(), width * 2), Math.max(getHeight(), height * 2));
-        //setPreferredSize(getSize());
-        //setMinimumSize(getSize());
-        originalPanel.setVisible(true);
-        originalPanel.repaint();
-
-        //pack();
-        QuadTree tree = new QuadTree(pixels, width, height, compressionRateSlider.getValue());
-
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Comprimida");
-        
-        compressedImagePanel = new ImagePanel();
-        compressedImagePanel.update(tree.getCompressedArray(), width, height);
+
+        compressedImagePanel = new ImagePanel(tree.getOriginalWidth(), tree.getOriginalHeight());
+        compressedImagePanel.update(tree.getCompressedArray(), tree.getOriginalWidth(), tree.getOriginalHeight());
         compressedPanel.add(compressedImagePanel);
-        compressedPanel.setSize(width, height);
+        compressedPanel.setSize(tree.getOriginalWidth(), tree.getOriginalHeight());
         compressedPanel.setMinimumSize(compressedPanel.getSize());
         compressedPanel.setPreferredSize(getSize());
-        //setSize(Math.max(getWidth(), width * 2), Math.max(getHeight(), height * 2));
-        //setPreferredSize(getSize());
-        //setMinimumSize(getSize());
         compressedPanel.setVisible(true);
         compressedPanel.repaint();
 
@@ -340,6 +339,8 @@ public class Index extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private File inputFile;
     private boolean invalidFile;
+    private boolean changeFile;
     private ImagePanel imagePanel;
     private ImagePanel compressedImagePanel;
+    private QuadTree tree;
 }

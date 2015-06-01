@@ -43,8 +43,8 @@ public class QuadTree {
 
             ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]));
         }
-        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Comprimindo QUADTREE");
-        this.compressedRoot = this.root instanceof PRLeafNode ? this.root : ((PRInternalNode) root).CompressChilds(compressionRate);
+
+        compressImage(compressionRate);
 
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Gravando JSONs");
         try {
@@ -72,7 +72,7 @@ public class QuadTree {
             FileWriter compressedWriter = new FileWriter(compressedFile);
             writer.write(json);
             compressedWriter.write(compressedJson);
-            
+
             //TODO: Fazer um to string, inviavel apresentar o JSON
             //JOptionPane.showMessageDialog(null, json);
             //JOptionPane.showMessageDialog(null, compressedJson);
@@ -98,17 +98,27 @@ public class QuadTree {
     public String toJson() {
         return root.toJson();
     }
-    
-    public int[] getCompressedArray()
-    {
-        if(compressedRoot instanceof PRInternalNode)
-        {
+
+    public void compressImage(int compressionRate) {
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Comprimindo QUADTREE");
+        this.compressedRoot = this.root instanceof PRLeafNode ? this.root : ((PRInternalNode) root).CompressChilds(compressionRate);
+    }
+
+    public int[] getCompressedArray() {
+        if (compressedRoot instanceof PRInternalNode) {
             PRInternalNode node = (PRInternalNode) compressedRoot;
             return node.getCompressedArray(originalWidth, originalHeight);
-        }
-        else
-        {
-            return new int[] { ((PRLeafNode) compressedRoot).getRgb() };
+        } else {
+            return new int[]{((PRLeafNode) compressedRoot).getRgb()};
         }
     }
+
+    public int getOriginalWidth() {
+        return originalWidth;
+    }
+
+    public int getOriginalHeight() {
+        return originalHeight;
+    }
+    
 }
