@@ -31,7 +31,7 @@ public class PRInternalNode extends PRNode {
         this.height = (marginH[1] - marginH[0]) + 1;
     }
 
-    private PRInternalNode(PRNode nwChild, PRNode neChild, PRNode swChild, PRNode seChild, PositionEnum position, int[] marginW, int[] marginH, int height, int width) {
+    private PRInternalNode(PRNode nwChild, PRNode neChild, PRNode swChild, PRNode seChild, PositionEnum position, int[] marginW, int[] marginH, int height, int width, PRNode father) {
         super();
 
         this.nwChild = nwChild;
@@ -43,6 +43,7 @@ public class PRInternalNode extends PRNode {
         this.height = height;
         this.width = width;
         this.position = position;
+        this.father = father;
     }
 
     //LEMBRAR QUE ESSES FILHOS PODEM SER INTERNOS OU FOLHAS, FAZER O TYPEOF PARA IDENTIFICAR QUAL TIPO ELE É.
@@ -191,6 +192,7 @@ public class PRInternalNode extends PRNode {
     }
 
     public PRNode CompressChilds(int compressionRate) {
+        PRInternalNode node = this.clone();
         List<PRNode> childs = new ArrayList<>();
         List<PRNode> compressed = new ArrayList<>();
         if (nwChild != null) {
@@ -206,65 +208,88 @@ public class PRInternalNode extends PRNode {
             childs.add(seChild.clone());
         }
 
-        boolean canCompress = true;
-        int r = 0;
-        int g = 0;
-        int b = 0;
         while (!childs.isEmpty()) {
-            PRNode child = childs.remove(0);
-            if (child instanceof PRLeafNode) {
-                PRLeafNode leafChild = (PRLeafNode) child;
-                while (!childs.isEmpty()) {
-                    PRLeafNode c = (PRLeafNode) childs.remove(0);
-                    if (c instanceof PRLeafNode) {
-                        int distance = leafChild.distanceColor(c.getColor());
-                        //distancia de branco até preto
-                        int maxDistance = (int) Math.sqrt(Math.pow(255, 2) * 3);
-                        canCompress = canCompress && (Math.round(distance * 100 / maxDistance)) <= compressionRate;
-                        if (!canCompress) {
-                            break;
+            boolean canCompress = true;
+            int r = 0;
+            int g = 0;
+            int b = 0;
+            while (!childs.isEmpty()) {
+                PRNode child = childs.remove(0);
+                if (child instanceof PRLeafNode) {
+                    PRLeafNode leafChild = (PRLeafNode) child;
+                    while (!childs.isEmpty()) {
+                        PRLeafNode c = (PRLeafNode) childs.remove(0);
+                        if (c instanceof PRLeafNode) {
+                            int distance = leafChild.distanceColor(c.getColor());
+                            //distancia de branco até preto
+                            int maxDistance = (int) Math.sqrt(Math.pow(255, 2) * 3);
+                            canCompress = canCompress && (Math.round((distance * 100) / maxDistance)) <= compressionRate;
+                            if (!canCompress) {
+                                break;
+                            }
+                            r += c.getColor().getRed();
+                            g += c.getColor().getGreen();
+                            b += c.getColor().getBlue();
                         }
-                        r += c.getColor().getRed();
-                        g += c.getColor().getGreen();
-                        b += c.getColor().getBlue();
+                    }
+                    if (canCompress) {
+                        r += leafChild.getColor().getRed();
+                        g += leafChild.getColor().getGreen();
+                        b += leafChild.getColor().getBlue();
+
+                        compressed.add(new PRLeafNode(0, 0, new Color(Math.round(r / 4), Math.round(g / 4), Math.round(b / 4)).getRGB()));
+                    } else {
+                        break;
+                    }
+                } else {
+                    compressed.add(((PRInternalNode) child).CompressChilds(compressionRate));
+                    //if (child.father != null) {
+                    //compressed.add(((PRInternalNode) child.father).CompressChilds(compressionRate));
+                    //}
+                }
+            }
+
+            if (compressed.size() == 1) {
+                node.compressedChild = (PRLeafNode) compressed.remove(0);
+                node.compressedChild.father = node;
+                node.compressedChild.level = node.level + 1;
+                node.cleanChilds();
+            } else {
+                for (PRNode c : compressed) {
+                    switch (node.getPositionNode((PRInternalNode) c)) {
+                        case NW:
+                            node.nwChild = c;
+                            break;
+                        case NE:
+                            node.neChild = c;
+                            break;
+                        case SW:
+                            node.swChild = c;
+                            break;
+                        case SE:
+                            node.seChild = c;
+                            break;
                     }
                 }
-                if (canCompress) {
-                    r += leafChild.getColor().getRed();
-                    g += leafChild.getColor().getGreen();
-                    b += leafChild.getColor().getBlue();
-
-                    compressed.add(new PRLeafNode(0, 0, new Color(Math.round(r / 4), Math.round(g / 4), Math.round(b / 4)).getRGB()));
-                } else {
-                    break;
-                }
-            } else {
-                compressed.add(((PRInternalNode) child).CompressChilds(compressionRate));
             }
-        }
 
-        PRInternalNode node = this.clone();
-        if (compressed.size() == 1) {
-            node.compressedChild = (PRLeafNode) compressed.remove(0);
-            node.compressedChild.father = node;
-            node.compressedChild.level = node.level + 1;
-            node.cleanChilds();
-        } else {
-            for (PRNode c : compressed) {
-                switch (node.getPositionNode((PRInternalNode) c)) {
-                    case NW:
-                        node.nwChild = c;
-                        break;
-                    case NE:
-                        node.neChild = c;
-                        break;
-                    case SW:
-                        node.swChild = c;
-                        break;
-                    case SE:
-                        node.seChild = c;
-                        break;
+            //if (node.father != null) {
+            //PRInternalNode f = (PRInternalNode) node.father;
+            if (node.nwChild != null && node.nwChild instanceof PRInternalNode && node.neChild != null && node.neChild instanceof PRInternalNode && node.swChild != null && node.swChild instanceof PRInternalNode && node.seChild != null && node.seChild instanceof PRInternalNode) {
+                PRInternalNode nw = (PRInternalNode) node.nwChild;
+                PRInternalNode ne = (PRInternalNode) node.neChild;
+                PRInternalNode sw = (PRInternalNode) node.swChild;
+                PRInternalNode se = (PRInternalNode) node.seChild;
+
+                if (nw.compressedChild != null && ne.compressedChild != null && sw.compressedChild != null && se.compressedChild != null) {
+                    compressed.clear();
+                    childs.add(nw.compressedChild.clone());
+                    childs.add(nw.compressedChild.clone());
+                    childs.add(nw.compressedChild.clone());
+                    childs.add(nw.compressedChild.clone());
                 }
+                //}
+                //}
             }
         }
 
@@ -309,7 +334,7 @@ public class PRInternalNode extends PRNode {
 
     @Override
     public PRInternalNode clone() {
-        return new PRInternalNode(nwChild, neChild, swChild, seChild, position, marginW, marginH, height, width);
+        return new PRInternalNode(nwChild, neChild, swChild, seChild, position, marginW, marginH, height, width, father);
     }
 
     private void cleanChilds() {

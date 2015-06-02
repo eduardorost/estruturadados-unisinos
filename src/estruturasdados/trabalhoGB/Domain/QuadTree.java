@@ -44,9 +44,7 @@ public class QuadTree {
             ((PRInternalNode) root).insert(new PRLeafNode(x, y, pixels[i]));
         }
 
-        compressImage(compressionRate);
-
-        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Gravando JSONs");
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Gravando JSON Imagem Original");
         try {
             File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
 
@@ -58,30 +56,19 @@ public class QuadTree {
                 }
             }
             File file = new File(Paths.get(directory.getAbsolutePath(), "quadtree.json").toString());
-            File compressedFile = new File(Paths.get(directory.getAbsolutePath(), "quadtree_compressed.json").toString());
-
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            if (!compressedFile.exists()) {
-                file.createNewFile();
-            }
+            
             String json = this.toJson();
-            String compressedJson = this.compressedRoot.toJson();
             FileWriter writer = new FileWriter(file);
-            FileWriter compressedWriter = new FileWriter(compressedFile);
             writer.write(json);
-            compressedWriter.write(compressedJson);
-
-            //TODO: Fazer um to string, inviavel apresentar o JSON
-            //JOptionPane.showMessageDialog(null, json);
-            //JOptionPane.showMessageDialog(null, compressedJson);
+            
             writer.close();
-            compressedWriter.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        compressImage(compressionRate);
+
     }
 
     private int width;
@@ -102,6 +89,23 @@ public class QuadTree {
     public void compressImage(int compressionRate) {
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Comprimindo QUADTREE");
         this.compressedRoot = this.root instanceof PRLeafNode ? this.root : ((PRInternalNode) root).CompressChilds(compressionRate);
+        System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Gravando JSON Imagem Comprimida");
+        try {
+            File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
+
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            File compressedFile = new File(Paths.get(directory.getAbsolutePath(), "quadtree_compressed.json").toString());
+            
+            String compressedJson = this.compressedRoot.toJson();
+            FileWriter compressedWriter = new FileWriter(compressedFile);
+            compressedWriter.write(compressedJson);
+            compressedWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int[] getCompressedArray() {
