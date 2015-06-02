@@ -265,9 +265,8 @@ public class Index extends javax.swing.JFrame {
             imagePanel = new ImagePanel(width, height);
             imagePanel.update(pixels, width, height);
             originalPanel.add(imagePanel);
-            //originalPanel.setSize(width, height);
-            //originalPanel.setMinimumSize(originalPanel.getSize());
-            //originalPanel.setPreferredSize(getSize());
+            originalPanel.setSize(width, height);
+            originalPanel.setMinimumSize(originalPanel.getSize());
             originalPanel.setVisible(true);
             originalPanel.repaint();
 
@@ -282,9 +281,8 @@ public class Index extends javax.swing.JFrame {
         compressedImagePanel = new ImagePanel(tree.getOriginalWidth(), tree.getOriginalHeight());
         compressedImagePanel.update(tree.getCompressedArray(), tree.getOriginalWidth(), tree.getOriginalHeight());
         compressedPanel.add(compressedImagePanel);
-        //compressedPanel.setSize(tree.getOriginalWidth(), tree.getOriginalHeight());
-        //compressedPanel.setMinimumSize(compressedPanel.getSize());
-        //compressedPanel.setPreferredSize(getSize());
+        compressedPanel.setSize(tree.getOriginalWidth(), tree.getOriginalHeight());
+        compressedPanel.setMinimumSize(compressedPanel.getSize());
         compressedPanel.setVisible(true);
         compressedPanel.repaint();
 
