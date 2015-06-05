@@ -7,10 +7,12 @@ package estruturasdados.trabalhoGB;
 
 import br.unisinos.imagepanel.ImagePanel;
 import estruturasdados.trabalhoGB.Domain.QuadTree;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Panel;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -208,8 +210,8 @@ public class Index extends javax.swing.JFrame {
         compressionRateField.setText(source.getValue() + " %");
         if (!invalidFile) {
             proccessImageButton.setEnabled(true);
-                compressedPanel.removeAll();
-                compressedPanel.repaint();
+            compressedPanel.removeAll();
+            compressedPanel.repaint();
         }
     }//GEN-LAST:event_compressionRateSliderStateChanged
 
@@ -277,14 +279,37 @@ public class Index extends javax.swing.JFrame {
             tree.compressImage(compressionRateSlider.getValue());
         }
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Comprimida");
-
+        int[] teste = tree.getCompressedArray();
         compressedImagePanel = new ImagePanel(tree.getOriginalWidth(), tree.getOriginalHeight());
-        compressedImagePanel.update(tree.getCompressedArray(), tree.getOriginalWidth(), tree.getOriginalHeight());
+        compressedImagePanel.update(teste, tree.getOriginalWidth(), tree.getOriginalHeight());
         compressedPanel.add(compressedImagePanel);
         compressedPanel.setSize(tree.getOriginalWidth(), tree.getOriginalHeight());
         compressedPanel.setMinimumSize(compressedPanel.getSize());
         compressedPanel.setVisible(true);
         compressedPanel.repaint();
+
+        try {
+            File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
+
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            File ppmFile = new File(Paths.get(directory.getAbsolutePath(), "compressed.ppm").toString());
+
+            String ppm = "";
+            for (int t : teste) {
+                Color c = new Color(t);
+                ppm += c.getRed() + System.getProperty("line.separator");
+                ppm += c.getGreen() + System.getProperty("line.separator");
+                ppm += c.getBlue() + System.getProperty("line.separator");
+            }
+            FileWriter ppmWriter = new FileWriter(ppmFile);
+            ppmWriter.write(ppm);
+            ppmWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         pack();
 

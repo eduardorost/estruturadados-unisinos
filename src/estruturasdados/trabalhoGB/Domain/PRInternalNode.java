@@ -223,7 +223,7 @@ public class PRInternalNode extends PRNode {
                             int distance = leafChild.distanceColor(c.getColor());
                             //distancia de branco até preto
                             int maxDistance = (int) Math.sqrt(Math.pow(255, 2) * 3);
-                            canCompress = canCompress && (Math.round((distance * 100) / maxDistance)) <= compressionRate;
+                            canCompress = canCompress && ((double) (distance * 100) / maxDistance) <= compressionRate;
                             if (!canCompress) {
                                 break;
                             }
@@ -249,7 +249,9 @@ public class PRInternalNode extends PRNode {
                 }
             }
 
-            if (compressed.size() == 1) {
+            if (compressed.isEmpty()) {
+                return node;
+            } else if (compressed.size() == 1) {
                 node.compressedChild = (PRLeafNode) compressed.remove(0);
                 node.compressedChild.father = node;
                 node.compressedChild.level = node.level + 1;
@@ -281,12 +283,13 @@ public class PRInternalNode extends PRNode {
                 PRInternalNode sw = (PRInternalNode) node.swChild;
                 PRInternalNode se = (PRInternalNode) node.seChild;
 
+                //ARRUMAR!! ENTRA EM LOOP
                 if (nw.compressedChild != null && ne.compressedChild != null && sw.compressedChild != null && se.compressedChild != null) {
                     compressed.clear();
                     childs.add(nw.compressedChild.clone());
-                    childs.add(nw.compressedChild.clone());
-                    childs.add(nw.compressedChild.clone());
-                    childs.add(nw.compressedChild.clone());
+                    childs.add(ne.compressedChild.clone());
+                    childs.add(sw.compressedChild.clone());
+                    childs.add(se.compressedChild.clone());
                 }
                 //}
                 //}
