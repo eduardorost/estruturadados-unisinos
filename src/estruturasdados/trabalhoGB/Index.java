@@ -9,8 +9,6 @@ import br.unisinos.imagepanel.ImagePanel;
 import estruturasdados.trabalhoGB.Domain.QuadTree;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Panel;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

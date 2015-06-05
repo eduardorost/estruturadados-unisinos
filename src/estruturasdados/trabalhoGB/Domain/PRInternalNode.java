@@ -177,20 +177,6 @@ public class PRInternalNode extends PRNode {
         }
     }
 
-    @Override
-    public String toJson() {
-        Gson gson = new GsonBuilder()
-                .enableComplexMapKeySerialization()
-                .serializeNulls()
-                .registerTypeAdapter(PRLeafNode.class, new PRLeafNodeTypeAdapter())
-                .registerTypeAdapter(PRInternalNode.class, new PRInternalNodeTypeAdapter())
-                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                .setPrettyPrinting()
-                .create();
-
-        return gson.toJson(this);
-    }
-
     public PRNode CompressChilds(int compressionRate) {
         PRInternalNode node = this.clone();
         List<PRNode> childs = new ArrayList<>();
@@ -213,6 +199,9 @@ public class PRInternalNode extends PRNode {
             int r = 0;
             int g = 0;
             int b = 0;
+            //distancia de branco até preto
+            int maxDistance = (int) Math.sqrt(Math.pow(255, 2) * 3);
+
             while (!childs.isEmpty()) {
                 PRNode child = childs.remove(0);
                 if (child instanceof PRLeafNode) {
@@ -221,8 +210,6 @@ public class PRInternalNode extends PRNode {
                         PRLeafNode c = (PRLeafNode) childs.remove(0);
                         if (c instanceof PRLeafNode) {
                             int distance = leafChild.distanceColor(c.getColor());
-                            //distancia de branco até preto
-                            int maxDistance = (int) Math.sqrt(Math.pow(255, 2) * 3);
                             canCompress = canCompress && ((double) (distance * 100) / maxDistance) <= compressionRate;
                             if (!canCompress) {
                                 break;
@@ -243,9 +230,6 @@ public class PRInternalNode extends PRNode {
                     }
                 } else {
                     compressed.add(((PRInternalNode) child).CompressChilds(compressionRate));
-                    //if (child.father != null) {
-                    //compressed.add(((PRInternalNode) child.father).CompressChilds(compressionRate));
-                    //}
                 }
             }
 
@@ -275,15 +259,12 @@ public class PRInternalNode extends PRNode {
                 }
             }
 
-            //if (node.father != null) {
-            //PRInternalNode f = (PRInternalNode) node.father;
             if (node.nwChild != null && node.nwChild instanceof PRInternalNode && node.neChild != null && node.neChild instanceof PRInternalNode && node.swChild != null && node.swChild instanceof PRInternalNode && node.seChild != null && node.seChild instanceof PRInternalNode) {
                 PRInternalNode nw = (PRInternalNode) node.nwChild;
                 PRInternalNode ne = (PRInternalNode) node.neChild;
                 PRInternalNode sw = (PRInternalNode) node.swChild;
                 PRInternalNode se = (PRInternalNode) node.seChild;
 
-                //ARRUMAR!! ENTRA EM LOOP
                 if (nw.compressedChild != null && ne.compressedChild != null && sw.compressedChild != null && se.compressedChild != null) {
                     compressed.clear();
                     childs.add(nw.compressedChild.clone());
@@ -291,60 +272,10 @@ public class PRInternalNode extends PRNode {
                     childs.add(sw.compressedChild.clone());
                     childs.add(se.compressedChild.clone());
                 }
-                //}
-                //}
             }
         }
 
         return node;
-    }
-
-    public PRLeafNode getCompressedChild() {
-        return compressedChild;
-    }
-
-    public PRNode getNwChild() {
-        return nwChild;
-    }
-
-    public PRNode getNeChild() {
-        return neChild;
-    }
-
-    public PRNode getSwChild() {
-        return swChild;
-    }
-
-    public PRNode getSeChild() {
-        return seChild;
-    }
-
-    public int[] getMarginW() {
-        return marginW;
-    }
-
-    public int[] getMarginH() {
-        return marginH;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public PRInternalNode clone() {
-        return new PRInternalNode(nwChild, neChild, swChild, seChild, position, marginW, marginH, height, width, father);
-    }
-
-    private void cleanChilds() {
-        this.nwChild = null;
-        this.neChild = null;
-        this.swChild = null;
-        this.seChild = null;
     }
 
     public int[] getCompressedArray(int width, int height) {
@@ -416,6 +347,68 @@ public class PRInternalNode extends PRNode {
         }
 
         return pixels;
+    }
+
+    public PRLeafNode getCompressedChild() {
+        return compressedChild;
+    }
+
+    public PRNode getNwChild() {
+        return nwChild;
+    }
+
+    public PRNode getNeChild() {
+        return neChild;
+    }
+
+    public PRNode getSwChild() {
+        return swChild;
+    }
+
+    public PRNode getSeChild() {
+        return seChild;
+    }
+
+    public int[] getMarginW() {
+        return marginW;
+    }
+
+    public int[] getMarginH() {
+        return marginH;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    private void cleanChilds() {
+        this.nwChild = null;
+        this.neChild = null;
+        this.swChild = null;
+        this.seChild = null;
+    }
+
+    @Override
+    public String toJson() {
+        Gson gson = new GsonBuilder()
+                .enableComplexMapKeySerialization()
+                .serializeNulls()
+                .registerTypeAdapter(PRLeafNode.class, new PRLeafNodeTypeAdapter())
+                .registerTypeAdapter(PRInternalNode.class, new PRInternalNodeTypeAdapter())
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .setPrettyPrinting()
+                .create();
+
+        return gson.toJson(this);
+    }
+
+    @Override
+    public PRInternalNode clone() {
+        return new PRInternalNode(nwChild, neChild, swChild, seChild, position, marginW, marginH, height, width, father);
     }
 
 }
