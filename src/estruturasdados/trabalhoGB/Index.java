@@ -1,8 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+// Nós (Eduardo Rost, Fabiano Menegussi, Renan Santos), garantimos que:
+//
+// - Não utilizamos código fonte obtidos de outros estudantes,
+// ou fonte não autorizada, seja modificado ou cópia literal.
+// - Todo código usado em nosso trabalho ´e resultado do nosso
+// trabalho original, ou foi derivado de um
+// código publicado nos livros texto desta disciplina.
+// - Temos total ciência das consequências em caso de violarmos estes termos.
 package estruturasdados.trabalhoGB;
 
 import br.unisinos.imagepanel.ImagePanel;
@@ -24,10 +27,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.filechooser.FileFilter;
 
-/**
- *
- * @author rosted
- */
 public class Index extends javax.swing.JFrame {
 
     /**
@@ -163,12 +162,16 @@ public class Index extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /*
+        Cria a tela para seleção da imagem
+    */
     private void selectFileButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectFileButtonMouseClicked
 
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
         FileFilter ff = new FileFilter() {
-
+            
+            // Define o tipo de arquivo que pode ser selecionado.
             @Override
             public boolean accept(File f) {
                 return f.getName().endsWith(".ppm") || f.isDirectory();
@@ -213,22 +216,27 @@ public class Index extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_compressionRateSliderStateChanged
 
+    // Método que carrega o arquivo selecionado e o comprime conforme seleção do usuário.
     private void proccessImageButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_proccessImageButtonMouseClicked
 
         if (!proccessImageButton.isEnabled()) {
             return;
         }
-
+        
         proccessImageButton.setEnabled(false);
-
+        
+        //SE é a primeira vez que o arquivo está sendo inserido e comprimido
         if (changeFile) {
+            
             List<String> lines = null;
 
             try {
+                // Carrega todo o arquivo para a Lista
                 lines = Files.readAllLines(Paths.get(inputFile.getAbsolutePath()));
             } catch (IOException ex) {
                 Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
             }
+            // Remove a primeira linha do arquivo e verifica se tipo de arquivo é do tipo P3
             if (!"P3".equals(lines.remove(0).toUpperCase())) {
                 JOptionPane.showMessageDialog(this, "Tipo do arquivo incorreto.", "Dialog", JOptionPane.ERROR_MESSAGE);
                 invalidFile = true;
@@ -236,32 +244,38 @@ public class Index extends javax.swing.JFrame {
             }
 
             invalidFile = false;
-
+            // Remove a segunda linha do arquivo para pegar a altura e a largura da imagem ppm
             String[] size = lines.remove(0).split(" ");
             int width = Integer.valueOf(size[0]);
             int height = Integer.valueOf(size[1]);
 
             int maxrgb = Integer.valueOf(lines.remove(0));
-
+            
+            // Cria um array com tamanho da altura X tamanho largura do arquivo importado para armazenar os pixels.
             int[] pixels = new int[width * height];
 
             System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Identificando RGBs");
+            
             for (int i = 0; i < pixels.length; i++) {
+                // Remove a proxima linha que será a cor vermelha
                 int r = Integer.valueOf(lines.remove(0));
+                // Remove a proxima linha que será a cor verde
                 int g = Integer.valueOf(lines.remove(0));
+                // Remove a proxima linha que será a cor azul
                 int b = Integer.valueOf(lines.remove(0));
 
                 //0x00FF0000 -> hexadecimal do vermelho
                 //0x0000FF00 -> hexadecimal do verde
-                //0x000000FF -> hexadecimal do azul
-                r = (r << 16) & 0x00FF0000;
-                g = (g << 8) & 0x0000FF00;
-                b = b & 0x000000FF;
+                //0x000000FF -> hexadecimal do azul                
+                r = (r << 16) & 0x00FF0000; // bits (16 a 23) reservados para o valor do canal R (red)
+                g = (g << 8) & 0x0000FF00;  // bits (8 a 15) reservados para o valor do canal G (green)
+                b = b & 0x000000FF;         // bits (0 a 7) reservados para o valor do canal B (blue)
 
-                pixels[i] = 0xFF000000 | r | g | b;
+                pixels[i] = 0xFF000000 | r | g | b; // Junta e adiciona ao array de pixels.
             }
 
             System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Original");
+            // Imprime a imagem original.
             imagePanel = new ImagePanel(width, height);
             imagePanel.update(pixels, width, height);
             originalPanel.add(imagePanel);
@@ -271,13 +285,19 @@ public class Index extends javax.swing.JFrame {
             originalPanel.repaint();
 
             //pack();
+            // Cria a QuadTree passando o array de pixels, a largura da imagem, a altura da imagem e a taxa de compressão.
             tree = new QuadTree(pixels, width, height, compressionRateSlider.getValue());
             changeFile = false;
         } else {
+            // Senão altera a taxa de compressão do arquivo conforme definição do usuário.
             tree.compressImage(compressionRateSlider.getValue());
         }
+        
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Comprimida");
+        
+        // Carrega a imagem que foi comprimida para ser visualizada na tela.
         int[] teste = tree.getCompressedArray();
+        
         compressedImagePanel = new ImagePanel(tree.getOriginalWidth(), tree.getOriginalHeight());
         compressedImagePanel.update(teste, tree.getOriginalWidth(), tree.getOriginalHeight());
         compressedPanel.add(compressedImagePanel);
@@ -287,11 +307,13 @@ public class Index extends javax.swing.JFrame {
         compressedPanel.repaint();
 
         try {
+            
             File directory = new File(Paths.get(System.getProperty("user.dir"), "json").toString());
 
             if (!directory.exists()) {
                 directory.mkdir();
             }
+            // Grava arquivo da arvore comprimida em um arquivo PPM
             File ppmFile = new File(Paths.get(directory.getAbsolutePath(), "compressed.ppm").toString());
 
             String ppm = "";

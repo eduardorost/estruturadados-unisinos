@@ -1,8 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+// Nós (Eduardo Rost, Fabiano Menegussi, Renan Santos), garantimos que:
+//
+// - Não utilizamos código fonte obtidos de outros estudantes,
+// ou fonte não autorizada, seja modificado ou cópia literal.
+// - Todo código usado em nosso trabalho ´e resultado do nosso
+// trabalho original, ou foi derivado de um
+// código publicado nos livros texto desta disciplina.
+// - Temos total ciência das consequências em caso de violarmos estes termos.
 package estruturasdados.trabalhoGB.Helpers;
 
 import com.google.gson.TypeAdapter;
@@ -12,10 +15,6 @@ import estruturasdados.trabalhoGB.Domain.PRLeafNode;
 import java.awt.Color;
 import java.io.IOException;
 
-/**
- *
- * @author rosted
- */
 public class PRLeafNodeTypeAdapter extends TypeAdapter<PRLeafNode>{
 
     @Override

@@ -1,8 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+// Nós (Eduardo Rost, Fabiano Menegussi, Renan Santos), garantimos que:
+//
+// - Não utilizamos código fonte obtidos de outros estudantes,
+// ou fonte não autorizada, seja modificado ou cópia literal.
+// - Todo código usado em nosso trabalho ´e resultado do nosso
+// trabalho original, ou foi derivado de um
+// código publicado nos livros texto desta disciplina.
+// - Temos total ciência das consequências em caso de violarmos estes termos.
 package estruturasdados.trabalhoGB.Domain;
 
 import java.io.FileWriter;
@@ -13,10 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author rosted
- */
+
 public class QuadTree {
 
     public QuadTree(int[] pixels, int width, int height, int compressionRate) {
@@ -32,7 +32,9 @@ public class QuadTree {
 
         int[] w = {0, this.width - 1};
         int[] h = {0, this.height - 1};
+        
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Montando QUADTREE");
+        
         this.root = new PRInternalNode(w, h, null);
 
         for (int i = 0; i < pixels.length; i++) {
