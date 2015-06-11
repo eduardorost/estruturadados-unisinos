@@ -27,10 +27,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.filechooser.FileFilter;
 
-/**
- *
- * @author rosted
- */
 public class Index extends javax.swing.JFrame {
 
     /**
@@ -279,7 +275,7 @@ public class Index extends javax.swing.JFrame {
             }
 
             System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Original");
-            
+            // Imprime a imagem original.
             imagePanel = new ImagePanel(width, height);
             imagePanel.update(pixels, width, height);
             originalPanel.add(imagePanel);
@@ -299,6 +295,7 @@ public class Index extends javax.swing.JFrame {
         
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + "Imprimindo Imagem Comprimida");
         
+        // Carrega a imagem que foi comprimida para ser visualizada na tela.
         int[] teste = tree.getCompressedArray();
         
         compressedImagePanel = new ImagePanel(tree.getOriginalWidth(), tree.getOriginalHeight());
@@ -316,6 +313,7 @@ public class Index extends javax.swing.JFrame {
             if (!directory.exists()) {
                 directory.mkdir();
             }
+            // Grava arquivo da arvore comprimida em um arquivo PPM
             File ppmFile = new File(Paths.get(directory.getAbsolutePath(), "compressed.ppm").toString());
 
             String ppm = "";

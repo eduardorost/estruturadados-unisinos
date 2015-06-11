@@ -14,10 +14,6 @@ import com.google.gson.GsonBuilder;
 import estruturasdados.trabalhoGB.Helpers.PRLeafNodeTypeAdapter;
 import java.awt.Color;
 
-/**
- *
- * @author rosted
- */
 public class PRLeafNode extends PRNode {
 
     public PRLeafNode(int x, int y, int rgb) {

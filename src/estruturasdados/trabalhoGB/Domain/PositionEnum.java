@@ -8,10 +8,6 @@
 // - Temos total ciência das consequências em caso de violarmos estes termos.
 package estruturasdados.trabalhoGB.Domain;
 
-/**
- *
- * @author rosted
- */
 public enum PositionEnum {
 
     ROOT(0), NW(1), NE(2), SW(3), SE(4);

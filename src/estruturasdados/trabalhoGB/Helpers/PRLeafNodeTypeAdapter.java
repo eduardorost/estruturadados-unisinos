@@ -15,10 +15,6 @@ import estruturasdados.trabalhoGB.Domain.PRLeafNode;
 import java.awt.Color;
 import java.io.IOException;
 
-/**
- *
- * @author rosted
- */
 public class PRLeafNodeTypeAdapter extends TypeAdapter<PRLeafNode>{
 
     @Override

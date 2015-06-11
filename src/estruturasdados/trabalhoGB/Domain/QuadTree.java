@@ -16,10 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author rosted
- */
+
 public class QuadTree {
 
     public QuadTree(int[] pixels, int width, int height, int compressionRate) {
@@ -35,7 +32,9 @@ public class QuadTree {
 
         int[] w = {0, this.width - 1};
         int[] h = {0, this.height - 1};
+        
         System.out.println(new SimpleDateFormat("dd/MM/yyyy hh:mm ").format(new Date()) + " Montando QUADTREE");
+        
         this.root = new PRInternalNode(w, h, null);
 
         for (int i = 0; i < pixels.length; i++) {

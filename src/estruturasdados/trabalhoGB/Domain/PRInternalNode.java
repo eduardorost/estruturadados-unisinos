@@ -18,10 +18,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author rosted
- */
+
 public class PRInternalNode extends PRNode {
 
     public PRInternalNode(int[] marginW, int[] marginH, PRNode father) {

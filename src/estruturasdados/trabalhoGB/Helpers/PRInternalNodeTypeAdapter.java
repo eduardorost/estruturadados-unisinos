@@ -17,10 +17,7 @@ import estruturasdados.trabalhoGB.Domain.PRInternalNode;
 import estruturasdados.trabalhoGB.Domain.PRLeafNode;
 import java.io.IOException;
 
-/**
- *
- * @author rosted
- */
+
 public class PRInternalNodeTypeAdapter extends TypeAdapter<PRInternalNode> {
 
     @Override
