@@ -25,7 +25,7 @@ public class QuadTree {
         this.originalWidth = width;
         this.originalHeight = height;
 
-        if (pixels.length == 0) {
+        if (pixels.length == 1) {
             this.root = new PRLeafNode(0, 0, pixels[0]);
             return;
         }
