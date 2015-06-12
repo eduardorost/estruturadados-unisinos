@@ -6,7 +6,6 @@
 // trabalho original, ou foi derivado de um
 // código publicado nos livros texto desta disciplina.
 // - Temos total ciência das consequências em caso de violarmos estes termos.
-
 package estruturasdados.trabalhoGB.Domain;
 
 import com.google.gson.FieldNamingPolicy;
@@ -17,7 +16,6 @@ import estruturasdados.trabalhoGB.Helpers.PRLeafNodeTypeAdapter;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class PRInternalNode extends PRNode {
 
@@ -45,6 +43,7 @@ public class PRInternalNode extends PRNode {
         this.width = width;
         this.position = position;
         this.father = father;
+        this.level = father == null ? 0 : father.getLevel() + 1;
     }
 
     //LEMBRAR QUE ESSES FILHOS PODEM SER INTERNOS OU FOLHAS, FAZER O TYPEOF PARA IDENTIFICAR QUAL TIPO ELE É.
@@ -182,17 +181,34 @@ public class PRInternalNode extends PRNode {
         PRInternalNode node = this.clone();
         List<PRNode> childs = new ArrayList<>();
         List<PRNode> compressed = new ArrayList<>();
+        PRNode nw = null, ne = null, sw = null, se = null;
         if (nwChild != null) {
-            childs.add(nwChild.clone());
+            nw = nwChild.clone();
+            nw.father = node;
+            nw.level = node.level + 1;
+            node.nwChild = nw;
+            childs.add(nw);
         }
         if (neChild != null) {
-            childs.add(neChild.clone());
+            ne = neChild.clone();
+            ne.father = node;
+            ne.level = node.level + 1;
+            node.neChild = ne;
+            childs.add(ne);
         }
         if (swChild != null) {
-            childs.add(swChild.clone());
+            sw = swChild.clone();
+            sw.father = node;
+            sw.level = node.level + 1;
+            node.swChild = sw;
+            childs.add(sw);
         }
         if (seChild != null) {
-            childs.add(seChild.clone());
+            se = seChild.clone();
+            se.father = node;
+            se.level = node.level + 1;
+            node.seChild = se;
+            childs.add(se);
         }
 
         while (!childs.isEmpty()) {
@@ -209,16 +225,15 @@ public class PRInternalNode extends PRNode {
                     PRLeafNode leafChild = (PRLeafNode) child;
                     while (!childs.isEmpty()) {
                         PRLeafNode c = (PRLeafNode) childs.remove(0);
-                        if (c instanceof PRLeafNode) {
-                            int distance = leafChild.distanceColor(c.getColor());
-                            canCompress = canCompress && ((double) (distance * 100) / maxDistance) <= compressionRate;
-                            if (!canCompress) {
-                                break;
-                            }
-                            r += c.getColor().getRed();
-                            g += c.getColor().getGreen();
-                            b += c.getColor().getBlue();
+
+                        int distance = leafChild.distanceColor(c.getColor());
+                        canCompress = canCompress && ((double) (distance * 100) / maxDistance) <= compressionRate;
+                        if (!canCompress) {
+                            break;
                         }
+                        r += c.getColor().getRed();
+                        g += c.getColor().getGreen();
+                        b += c.getColor().getBlue();
                     }
                     if (canCompress) {
                         r += leafChild.getColor().getRed();
@@ -261,17 +276,17 @@ public class PRInternalNode extends PRNode {
             }
 
             if (node.nwChild != null && node.nwChild instanceof PRInternalNode && node.neChild != null && node.neChild instanceof PRInternalNode && node.swChild != null && node.swChild instanceof PRInternalNode && node.seChild != null && node.seChild instanceof PRInternalNode) {
-                PRInternalNode nw = (PRInternalNode) node.nwChild;
-                PRInternalNode ne = (PRInternalNode) node.neChild;
-                PRInternalNode sw = (PRInternalNode) node.swChild;
-                PRInternalNode se = (PRInternalNode) node.seChild;
+                PRInternalNode inw = (PRInternalNode) node.nwChild;
+                PRInternalNode ine = (PRInternalNode) node.neChild;
+                PRInternalNode isw = (PRInternalNode) node.swChild;
+                PRInternalNode ise = (PRInternalNode) node.seChild;
 
-                if (nw.compressedChild != null && ne.compressedChild != null && sw.compressedChild != null && se.compressedChild != null) {
+                if (inw.compressedChild != null && ine.compressedChild != null && isw.compressedChild != null && ise.compressedChild != null) {
                     compressed.clear();
-                    childs.add(nw.compressedChild.clone());
-                    childs.add(ne.compressedChild.clone());
-                    childs.add(sw.compressedChild.clone());
-                    childs.add(se.compressedChild.clone());
+                    childs.add(inw.compressedChild.clone());
+                    childs.add(ine.compressedChild.clone());
+                    childs.add(isw.compressedChild.clone());
+                    childs.add(ise.compressedChild.clone());
                 }
             }
         }
