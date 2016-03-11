@@ -1,2 +1,2 @@
-# unisinos
-Repositorio com fins estudantis
+# estruturadados-unisinos
+Repositorio para trabalhos da cadeira de estrutura de dados 
